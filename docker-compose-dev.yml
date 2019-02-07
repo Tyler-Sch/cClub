@@ -1,0 +1,33 @@
+version: '3.7'
+
+services:
+
+  recipes:
+    build:
+      context: ./services/recipeAPI
+      dockerfile: Dockerfile-dev
+    volumes:
+      - './services/recipeAPI:/usr/src/app'
+    ports:
+      - 5000:8000
+    environment:
+      - APP_SETTINGS=DevelopmentConfig
+      - DATABASE_URI=postgres://postgres:postgres@recipes-db:5432/recipes_test
+      - DATABASE_TEST_URL=postgres://postgres@recipes-db:5432/recipes_test
+    depends_on:
+      - recipes-db
+
+  recipes-db:
+    build:
+      context: ./services/recipeAPI/server/db
+      dockerfile: Dockerfile
+    ports:
+      - 5435:5432
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+
+volumes:
+  pgdata:
