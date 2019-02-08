@@ -49,11 +49,19 @@ async def get_random_recipes(request, amount):
 
 @app.get('/recipes/filter')
 async def get_recipe_restricted(request):
+    # might make sense to have this use a looser search
+    # maybe using matching% Otherwise it might be way
+    # too constrictive
+    # COULD ADD A FLAG
     async with app.pool.acquire() as connection:
         data = request.args
+        print(data['include'])
+        mod_data = [f'%{i}%' for i in data['include']]
+        print(mod_data)
+
         include_ingredients = await connection.fetch("""
             SELECT id from ingredient_list
-            WHERE ingredient = any($1);
+            WHERE ingredient = any ($1);
         """, data['include'])
         include_strings = []
         for record in include_ingredients:
@@ -64,8 +72,14 @@ async def get_recipe_restricted(request):
         include_set = await connection.fetch(
             " INTERSECT ".join(include_strings)
         )
+        results = await connection.fetch("""
+            SELECT name, url, pic_url, source
+            FROM recipes
+            WHERE id = any($1);
+        """, include_set)
 
-    return json(include_set)
+    return json([dict(i) for i in results])
+    # return json(include_set)
 
 if __name__ == '__main__':
     if os.environ['APP_SETTINGS'] == 'DevelopmentConfig':
