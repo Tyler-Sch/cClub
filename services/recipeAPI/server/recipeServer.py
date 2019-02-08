@@ -55,9 +55,9 @@ async def get_recipe_restricted(request):
     # COULD ADD A FLAG
     async with app.pool.acquire() as connection:
         data = request.args
-        print(data['include'])
-        mod_data = [f'%{i}%' for i in data['include']]
-        print(mod_data)
+        # print(data['include'])
+        # mod_data = [f'%{i}%' for i in data['include']]
+        # print(mod_data)
 
         include_ingredients = await connection.fetch("""
             SELECT id from ingredient_list
@@ -73,7 +73,7 @@ async def get_recipe_restricted(request):
             " INTERSECT ".join(include_strings)
         )
         results = await connection.fetch("""
-            SELECT name, url, pic_url, source
+            SELECT id, name, url, pic_url, source
             FROM recipes
             WHERE id = any($1);
         """, include_set)

@@ -35,3 +35,11 @@ def test_random_recipes():
     assert response.status == 200
     data = response.json
     assert len(data['recipes']) == 10
+
+def test_restricted_recipe_search():
+    request, response = app.test_client.get(
+        '/recipes/filter?include=chicken&include=cheese',
+    )
+    assert response.status == 200
+    data = response.json
+    assert len(data) > 1
