@@ -8,4 +8,4 @@ done
 
 echo "Postgres started"
 
-python server/main.py
+python manage.py start

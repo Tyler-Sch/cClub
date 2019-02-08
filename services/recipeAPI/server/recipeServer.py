@@ -4,7 +4,7 @@ import os
 import asyncio
 import uvloop
 from asyncpg import connect, create_pool
-import config
+# import config
 
 
 app = Sanic(__name__)
