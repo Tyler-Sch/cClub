@@ -37,9 +37,22 @@ def test_random_recipes():
     assert len(data['recipes']) == 10
 
 def test_restricted_recipe_search():
+    search_item1 = 'chicken'
+    search_item2 = 'cheese'
     request, response = app.test_client.get(
-        '/recipes/filter?include=chicken&include=cheese',
+        f'/recipes/filter?include={search_item1}&include={search_item2}',
     )
     assert response.status == 200
     data = response.json
     assert len(data) > 1
+    for recipe in data:
+        request, response2 = app.test_client.get(f'/recipes/{recipe["id"]}')
+        recipe_data = response2.json
+        search_item1_in_recipe = False
+        search_item2_in_recipe = False
+        for ingredient in recipe_data['ingredients']:
+            if search_item1 in ingredient.lower():
+                search_item1_in_recipe = True
+            if search_item2 in ingredient.lower():
+                search_item2_in_recipe = True
+        assert (search_item1_in_recipe and search_item2_in_recipe) == True
