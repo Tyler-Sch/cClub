@@ -1,30 +1,23 @@
-from flask import Flask, jsonify
+from flask import Flask
 import os
 from flask_sqlalchemy import SQLAlchemy
 
-app = Flask(__name__)
+db = SQLAlchemy()
 
-app_settings = os.getenv('APP_SETTINGS')
-app.config.from_object(app_settings)
+def create_app(script_info=None):
 
-db = SQLAlchemy(app)
+    app = Flask(__name__)
 
+    app_settings = os.environ.get('APP_SETTINGS')
+    app.config.from_object(app_settings)
 
-class User(db.Model):
-    __tablename__ = 'users'
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    username = db.Column(db.String(128), nullable=False)
-    email = db.Column(db.String(128), nullable=False)
-    active = db.Column(db.Boolean(), default=True, nullable=False)
+    db.init_app(app)
 
-    def __init__(self, username, email):
-        self.username = username
-        self.email = email
+    from user_server.api.users import users_blueprint
+    app.register_blueprint(users_blueprint)
 
-@app.route('/')
-def hello():
-    return 'hello world'
+    @app.shell_context_processor
+    def ctx():
+        return {'app':app, 'db': db}
 
-
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5002)
+    return app
