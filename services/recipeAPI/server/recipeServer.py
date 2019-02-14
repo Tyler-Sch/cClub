@@ -4,18 +4,21 @@ import os
 import asyncio
 import uvloop
 from asyncpg import connect, create_pool
-# import config
+from sanic_cors import CORS
 
 
 app = Sanic(__name__)
 
+# Currently the various configurations are useless.
 app_settings = os.getenv('APP_SETTINGS')
 app.config.from_object(app_settings)
+
+CORS(app)
+
 
 @app.listener('before_server_start')
 async def register_db(app, loop):
     app.pool = await create_pool(dsn=os.environ.get('DATABASE_URI'), loop=loop)
-
 
 
 @app.route('/recipes/<id:int>')
