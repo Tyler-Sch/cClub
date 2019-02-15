@@ -13,9 +13,12 @@ class App extends React.Component {
       'recipes': [],
       'currentRecipe': 0,
       'userRecipes': [],
+      'searchQuery': ''
     }
     this.getNextRecipe = this.getNextRecipe.bind(this);
     this.addRecipe = this.addRecipe.bind(this);
+    this.updateSearch = this.updateSearch.bind(this);
+    this.search = this.search.bind(this);
   }
 
   componentDidMount() {
@@ -28,23 +31,67 @@ class App extends React.Component {
     );
 
     const json = await response.json();
-    console.log(json);
     const currentRecipes = this.state.recipes.slice(0, this.currentRecipe);
+    console.log(currentRecipes)
     this.setState({
       'recipes': [...currentRecipes, ...json.recipes]
     });
-    console.log(this.state.recipes);
   }
 
+  updateSearch(e) {
 
+    this.setState({
+      'searchQuery': e.target.value
+    })
+  }
+
+  async search(e) {
+    if (this.state.searchQuery.trim().length === 0) {
+      this.fetchRandomRecipes(20);
+    } else {
+      const searchParams = this.state.searchQuery.split(',').map(i => i.trim());
+      const plusForSpace = searchParams.map(i => i.split(' ').join('+'));
+      const joinedParams = plusForSpace.map(i => `include=${i}`).join('&');
+      const url = `http://localhost:5000/recipes/filter?${joinedParams}`;
+      console.log(url);
+      e.preventDefault();
+      const restrictedRecipes = await fetch(url);
+      const json = await restrictedRecipes.json();
+      const currentRecipes = this.state.recipes.slice(0, this.state.currentRecipe + 1);
+      console.log(`current recipe length = ${currentRecipes.length}`)
+
+      this.setState({
+        'recipes': [...currentRecipes,...json],
+        'currentRecipe': this.state.currentRecipe + 1
+      });
+
+    }
+
+
+  }
 
   getNextRecipe() {
     const recipeIndex = this.state.currentRecipe;
-    if (this.state.recipes.length - this.state.currentRecipe == 2) {
-      this.fetchRandomRecipes(20);
+    if (this.state.recipes.length - this.state.currentRecipe <= 2) {
+      console.log('in if claus in getNextRecipe')
+      console.log(`The recipe list is ${this.state.recipes.length}`)
+      console.log(`the current recipe Index is ${this.state.currentRecipe}`)
+      if (this.state.searchQuery == '') {
+        console.log('I am in top part of sub clause in getNextRecipe')
+        this.fetchRandomRecipes(20);
+        return
+      }
+      else {
+        console.log('I am in search part of getNextRecipe')
+        const event = document.createEvent('Event');
+        this.search(event);
+        return
+      }
+
     }
     this.setState({
       'currentRecipe': recipeIndex + 1
+
     });
   }
   addRecipe() {
@@ -61,7 +108,14 @@ class App extends React.Component {
     const recipeIndex = this.state.currentRecipe;
     return (
       <div>
-        <h1 className="title">Cooking Club</h1>
+        <div className="level">
+          <h1 className="title">Cooking Club</h1>
+          <IngredientSearchBar
+            update={this.updateSearch}
+            val={this.state.searchQuery}
+            submit={this.search}
+          />
+        </div>
         <div className="section">
           <MainWindow addRecipe={this.addRecipe} next={this.getNextRecipe}>
             {
@@ -80,7 +134,25 @@ class App extends React.Component {
 }
 
 
-
+const IngredientSearchBar = (props) => {
+  return (
+    <div className="field has-addons">
+      <div className="control">
+        <input onChange={props.update}
+          className="input"
+          type="text"
+          placeholder="Separate ingredients with comma"
+          value={props.val}
+        />
+      </div>
+      <div className="control">
+        <a onClick={props.submit} className="button is-info">
+          Search
+        </a>
+      </div>
+    </div>
+  )
+}
 
 
 

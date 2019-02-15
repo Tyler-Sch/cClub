@@ -79,7 +79,8 @@ async def get_recipe_restricted(request):
         results = await connection.fetch("""
             SELECT id, name, url, pic_url, source
             FROM recipes
-            WHERE id = any($1);
+            WHERE id = any($1)
+            ORDER BY random() LIMIT 300;
         """, include_set)
 
     return json([dict(i) for i in results])

@@ -7,7 +7,7 @@ const RecipeList = (props) => {
         target="_blank">{i.name}</a></li>
   );
   return (
-      <div classNmae="content is-large">
+      <div className="">
       <h1 className="has-text-centered">
         <h1 className="is-large">Selected Recipes</h1>
           <ul>
