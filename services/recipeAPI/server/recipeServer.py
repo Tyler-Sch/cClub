@@ -44,6 +44,7 @@ async def get_random_recipes(request, amount):
     async with app.pool.acquire() as connection:
         recipes = await connection.fetch("""
             SELECT id, name, source, pic_url, url FROM recipes
+            WHERE pic_url != 'missing'
             ORDER BY RANDOM() LIMIT $1;
         """, amount)
 

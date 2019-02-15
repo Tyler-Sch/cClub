@@ -21,6 +21,14 @@ const MainWindow = (props) => {
               <ButtonMain name="Next Please" handleClick={props.next} />
             </div>
           </div>
+          <nav className="breadcrumb is-centered">
+            <ul>
+              <li className="is-active"><a href="#">Recipe List</a></li>
+              <li><a href="#">Grocery List</a></li>
+              <li><a href="#">Friends</a></li>
+              <li><a href="#">Filters</a></li>
+            </ul>
+          </nav>
         </section>
   )
 

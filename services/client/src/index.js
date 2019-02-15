@@ -50,9 +50,11 @@ class App extends React.Component {
   addRecipe() {
     const recipeList = this.state.userRecipes;
     const currentRecipe = this.state.recipes[this.state.currentRecipe];
-    this.setState({
-      'userRecipes': [...recipeList, currentRecipe]
-    })
+    if (!recipeList.includes(currentRecipe)){
+      this.setState({
+        'userRecipes': [...recipeList, currentRecipe]
+      })
+    }
   }
 
   render() {
