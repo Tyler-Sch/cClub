@@ -1,25 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import 'bulma';
-
-const PictureWindow = ({ recipe: { name, pic_url, source } }) => {
-  return (
-    <div>
-      <h1 className="title has-text-centered"> {name}</h1>
-      {pic_url !== 'missing'
-      ? <img style={{marginLeft: 'auto',
-                     marginRight: 'auto',
-                     display: 'block'}}
-       src={pic_url} height="400px" width="400px" />
-      : <img style={{marginLeft: 'auto',
-                     marginRight: 'auto',
-                     display: 'block'}}
-      src="https://via.placeholder.com/400x400.png?text=No+Picture" />
-      }
-      <h6 className="subtitle has-text-centered">{source}</h6>
-    </div>
-  )
-}
+import MainWindow from './components/mainWindow/mainWindow';
+import PictureWindow from './components/mainWindow/pictureWindow';
+import RecipeList from './components/recipeList';
 
 
 class App extends React.Component {
@@ -27,30 +11,48 @@ class App extends React.Component {
     super();
     this.state = {
       'recipes': [],
-      'currentRecipe': 0
+      'currentRecipe': 0,
+      'userRecipes': [],
     }
     this.getNextRecipe = this.getNextRecipe.bind(this);
+    this.addRecipe = this.addRecipe.bind(this);
   }
 
   componentDidMount() {
-    this.fetchRandomRecipes();
+    this.fetchRandomRecipes(20);
   }
 
-  async fetchRandomRecipes() {
-    const response = await fetch('http://localhost:5000/recipes/random/20');
+  async fetchRandomRecipes(numRecipes) {
+    const response = await fetch(
+      `http://localhost:5000/recipes/random/${numRecipes}`
+    );
+
     const json = await response.json();
-
+    console.log(json);
+    const currentRecipes = this.state.recipes.slice(0, this.currentRecipe);
     this.setState({
-      'recipes': json.recipes,
+      'recipes': [...currentRecipes, ...json.recipes]
     });
+    console.log(this.state.recipes);
   }
+
+
 
   getNextRecipe() {
     const recipeIndex = this.state.currentRecipe;
+    if (this.state.recipes.length - this.state.currentRecipe == 2) {
+      this.fetchRandomRecipes(20);
+    }
     this.setState({
       'currentRecipe': recipeIndex + 1
     });
-    console.log(this.state.currentRecipe);
+  }
+  addRecipe() {
+    const recipeList = this.state.userRecipes;
+    const currentRecipe = this.state.recipes[this.state.currentRecipe];
+    this.setState({
+      'userRecipes': [...recipeList, currentRecipe]
+    })
   }
 
   render() {
@@ -59,43 +61,27 @@ class App extends React.Component {
       <div>
         <h1 className="title">Cooking Club</h1>
         <div className="section">
-          <MainWindow handleClick={this.getNextRecipe}>
+          <MainWindow addRecipe={this.addRecipe} next={this.getNextRecipe}>
             {
               this.state.recipes.length > 0
               ? <PictureWindow recipe={this.state.recipes[recipeIndex]} />
               : <h1> loading </h1>
             }
-
           </MainWindow>
+        </div>
+        <div className="section">
+          <RecipeList recipes={this.state.userRecipes} />
         </div>
       </div>
     )
   }
 }
-const ButtonMain = (props) => {
-  return (
-    <button onClick={props.handleClick}>{props.name}</button>
-  )
-}
 
-const MainWindow = (props) => {
-  return (
-        <section className="box">
-          <div className="columns">
-            <div className="column is-one-fifth box">
-              <ButtonMain name='Add to recipe list' handleClick={props.handleClick} />
-            </div>
-            <div className="column">
-              {props.children}
-            </div>
-            <div className="column is-one-fifth box">
-              <ButtonMain name="Next Please" handleClick={props.handleClick} />
-            </div>
-          </div>
-        </section>
-  )
 
-}
+
+
+
+
 
 ReactDOM.render(
   <App />,
