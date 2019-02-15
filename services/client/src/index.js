@@ -39,13 +39,17 @@ class App extends React.Component {
   }
 
   updateSearch(e) {
-
     this.setState({
       'searchQuery': e.target.value
     })
   }
 
   async search(e) {
+    // this recipe has trouble when no search results are returned.
+    // should set up a tile that for such a case
+    // for now, the main pic doesnt change when there is an empty search return
+    // which is really annoying when you hit the end of the normal list
+
     if (this.state.searchQuery.trim().length === 0) {
       this.fetchRandomRecipes(20);
     } else {
@@ -53,10 +57,12 @@ class App extends React.Component {
       const plusForSpace = searchParams.map(i => i.split(' ').join('+'));
       const joinedParams = plusForSpace.map(i => `include=${i}`).join('&');
       const url = `http://localhost:5000/recipes/filter?${joinedParams}`;
-      console.log(url);
       e.preventDefault();
       const restrictedRecipes = await fetch(url);
       const json = await restrictedRecipes.json();
+      if (json.length == 0) {
+        return
+      }
       const currentRecipes = this.state.recipes.slice(0, this.state.currentRecipe + 1);
       console.log(`current recipe length = ${currentRecipes.length}`)
 
@@ -64,20 +70,13 @@ class App extends React.Component {
         'recipes': [...currentRecipes,...json],
         'currentRecipe': this.state.currentRecipe + 1
       });
-
     }
-
-
   }
 
   getNextRecipe() {
     const recipeIndex = this.state.currentRecipe;
     if (this.state.recipes.length - this.state.currentRecipe <= 2) {
-      console.log('in if claus in getNextRecipe')
-      console.log(`The recipe list is ${this.state.recipes.length}`)
-      console.log(`the current recipe Index is ${this.state.currentRecipe}`)
       if (this.state.searchQuery == '') {
-        console.log('I am in top part of sub clause in getNextRecipe')
         this.fetchRandomRecipes(20);
         return
       }
