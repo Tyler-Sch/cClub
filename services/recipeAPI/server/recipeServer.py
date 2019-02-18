@@ -23,6 +23,10 @@ async def register_db(app, loop):
 
 @app.route('/recipes/<id:int>')
 async def getRecipe(request, id):
+    """
+        returns full recipe in json.
+    """
+
     async with app.pool.acquire() as connection:
         recipe_info = await connection.fetchrow("""
             SELECT * FROM recipes WHERE id = $1;
@@ -41,6 +45,9 @@ async def getRecipe(request, id):
 
 @app.route('/recipes/random/<amount:int>')
 async def get_random_recipes(request, amount):
+    """
+        get random n recipes. n being amount in the request
+    """
     async with app.pool.acquire() as connection:
         recipes = await connection.fetch("""
             SELECT id, name, source, pic_url, url FROM recipes
@@ -53,6 +60,14 @@ async def get_random_recipes(request, amount):
 
 @app.get('/recipes/filter')
 async def get_recipe_restricted(request):
+
+    """
+        simple search at the moment. Only include currently worksself.
+        Client send request with query string:
+            ?include=ingredient1&include=ingredient2
+
+            
+    """
     # might make sense to have this use a looser search
     # maybe using matching% Otherwise it might be way
     # too constrictive

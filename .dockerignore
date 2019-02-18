@@ -5,3 +5,4 @@ Dockerfile-prod
 __pycache__
 recipeServer
 cClub
+images

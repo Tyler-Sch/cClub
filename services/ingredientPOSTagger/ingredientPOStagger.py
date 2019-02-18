@@ -8,6 +8,13 @@ from sanic.response import json as json_response
 import asyncio
 import uvloop
 
+"""
+    Sanic server with one end point ('/ingredients') which takes a list
+    of ingredients, written in english, and uses an RNN to label the parts of
+    speech. Have not run without gpu support
+"""
+
+
 app = Sanic()
 model_main = load_model(
     'winningModelSoFar/doubleLayerGRUMoreData/'
@@ -22,6 +29,17 @@ with open('winningModelSoFar/doubleLayerGRUMoreData/tag2index.json', 'r') as f:
 
 @app.route('/ingredients', methods=["POST"])
 async def processIngredients(request):
+    """
+        takes {'ingredients': [list of ingredients]} and returns a list
+        for each word in the ingredient with a ingredients specific
+        part of speech tag.
+            'IN' = ingredient
+            'QTY' = quantity
+            'RE' = range end (for recipes with variable quantity range)
+            'UN' = unit of measurement
+            'C' = everything else (comment)
+    """
+
     ingredients_list = request.form['ingredients']
 
     loop = asyncio.get_event_loop()
@@ -55,6 +73,10 @@ def process_sentence(s, wordDict):
 
 def tag_ingredients(ingredientList, model, word2index, tag2index, maxlen=57):
     #print(ingredientList)
+    """
+        preprocesses text, make POS predictions, returns POS tagged
+        list of texts
+    """
     ingredient_vecs = [process_sentence(s, word2index) for s in ingredientList]
     padded_vecs = pad_sequences(ingredient_vecs, maxlen=maxlen, padding='post')
     # print(padded_vecs)

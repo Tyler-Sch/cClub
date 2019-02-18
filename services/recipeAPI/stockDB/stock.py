@@ -10,6 +10,12 @@ from asyncio import Queue
 import time
 import os
 
+"""
+    this file should get cleaned up a bit. A cli would be good where you
+    specify source file, amount of workers, database address, and
+    url for ingredient tagger
+"""
+
 
 
 async def main(recipe_file, workers, source):
