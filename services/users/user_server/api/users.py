@@ -17,22 +17,26 @@ def create_new_user():
         'message': 'pending'
     }
     data = request.form
-    username = data.get('username')
-    password = data.get('password')
-    email = data.get('email')
-    if username is not None and password is not None and email is not None:
-        # check if username exists
-        if not User.query.filter_by(username=username).first():
-            u = User(username=username, email=email, password=password)
-            db.session.add(u)
-            db.session.commit()
-        else:
-            # error for username already exists
-            response['message'] = 'user name already taken'
+    username, password, email = [
+                                data.get('username'),
+                                data.get('password'),
+                                data.get('email'),
+                                ]
+    for info in [username, password, email]:
+        if len(info) <= 1 or info is None:
+            response['message'] = 'There is a field missing'
             return jsonify(response)
+
+        # check if username exists
+    if not User.query.filter_by(username=username).first():
+        u = User(username=username, email=email, password=password)
+        db.session.add(u)
+        db.session.commit()
     else:
-        reponse['message'] = 'There is a field missing'
+        # error for username already exists
+        response['message'] = 'user name already taken'
         return jsonify(response)
+
 
     token = u.generate_auth_token()
     response['loggedIn'] = True

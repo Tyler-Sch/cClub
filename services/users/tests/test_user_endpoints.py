@@ -62,7 +62,7 @@ def test_add_user_already_exists(session, client):
     assert data['token'] == None
 
 
-def test_cant_make_user_with_out_username(session, client):
+def test_cant_make_user_with_out_username_or_password(session, client):
     response = client.post(
                             url_for('users.create_new_user'),
                             data={
@@ -71,11 +71,25 @@ def test_cant_make_user_with_out_username(session, client):
                                 'password': 'blank'
                             }
     )
-    data = response.get_json()
     assert response.status_code == 200
-    assert data['message'] == 'There is a missing field'
+    data = response.get_json()
+    assert data['message'] == 'There is a field missing'
     assert data['loggedIn'] == False
     assert data['token'] == None
+
+    response = client.post(
+                            url_for('users.create_new_user'),
+                            data={
+                                'username': 'hudsaroni',
+                                'email': 'hfs@testtest.com',
+                                'password': ''
+                            }
+    )
+    assert response.status_code == 200
+    data = response.get_json()
+    assert data['message'] == 'There is a field missing'
+    assert data['loggedIn'] == False
+
 
 def test_can_get_user_id_from_token(session, client):
     response = client.post(
