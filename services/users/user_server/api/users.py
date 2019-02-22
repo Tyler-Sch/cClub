@@ -17,19 +17,22 @@ def create_new_user():
         'message': 'pending'
     }
     data = request.form
-    username, password, email = [
-                                data.get('username'),
-                                data.get('password'),
-                                data.get('email'),
-                                ]
-    for info in [username, password, email]:
+    headings = ['username', 'password', 'email']
+    information = {i: data.get(i) for i in headings}
+
+    # check basic integrity of data (length and make sure it exists)
+    # there should probably be more checks here.
+    for _, info in information.items():
         if len(info) <= 1 or info is None:
             response['message'] = 'There is a field missing'
             return jsonify(response)
 
-        # check if username exists
-    if not User.query.filter_by(username=username).first():
-        u = User(username=username, email=email, password=password)
+    # check if username exists
+    if not User.query.filter_by(username=information['username']).first():
+        u = User(
+                username=information['username'],
+                email=information['email'],
+                password=information['password'])
         db.session.add(u)
         db.session.commit()
     else:
@@ -37,7 +40,7 @@ def create_new_user():
         response['message'] = 'user name already taken'
         return jsonify(response)
 
-
+    # info is valid, create token and respond with json
     token = u.generate_auth_token()
     response['loggedIn'] = True
     response['token'] = token.decode('utf-8')
