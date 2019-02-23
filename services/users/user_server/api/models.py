@@ -40,3 +40,41 @@ class User(db.Model):
             return None
         user = User.query.get(data['id'])
         return user
+
+"""
+tables to add:
+    Friends:
+        list of people you can share a grocery or recipe list with
+        table of three columns. user id, friend id
+    grocery list:
+        list of groceries. Can add items from recipe database or manually.
+        can share list with multiple users
+        - table columns
+            - item text
+            - creator user id
+            - date created
+            - list name
+            - list id
+
+    recipe list:
+        list of ids from recipe database
+        - table columns:
+            - recipe id
+            - user id
+            - recipe list
+            - is shared
+            - list name
+
+    grocery list share:
+        list of grocery lists with the people they are shared with
+        - table columns:
+            - grocery list id
+            - user id
+
+    recipe list share:
+        - table columns:
+            - recipe list id
+            - user id
+
+
+"""
