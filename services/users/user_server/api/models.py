@@ -8,8 +8,6 @@ from werkzeug.security import generate_password_hash, check_password_hash
 # need to set SECRET_KEY
 
 class User(db.Model):
-    # need to add password hashing
-    # need to add a password column
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     username = db.Column(db.String(128), nullable=False, unique=True)

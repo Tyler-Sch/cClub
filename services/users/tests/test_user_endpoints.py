@@ -110,17 +110,6 @@ def test_can_get_user_id_from_token(session, client):
     assert u.username == user_through_token.username
     assert u.email == user_through_token.email
 
-def test_user_login(session, client):
-    # DONT FORGET TO WRITE THESE TESTS
-    u = User(
-                        username='hudson',
-                        email='potato@example.com',
-                        password='chips'
-                        )
-    session.add(u)
-    session.commit()
-    assert len(list(User.query.all())) == 1
-
 
 def test_password_gets_hashed_via_endpoint(session, client):
     response = client.post(
@@ -136,3 +125,65 @@ def test_password_gets_hashed_via_endpoint(session, client):
     assert 'chips' != password_hash
     assert u.email == 'potato@example.com'
     assert u.check_password('chips') == True
+
+def add_user(session, username='hudson',
+             email='chip@example.com', password='chips'):
+    u = User(username=username, email=email, password=password)
+    session.add(u)
+    session.commit()
+    return u
+
+def test_user_login(session, client):
+    # DONT FORGET TO WRITE THESE TESTS
+    u = add_user(session)
+    assert len(list(User.query.all())) == 1
+    loginresponse = client.post(
+                                url_for('users.login'),
+                                data={
+                                    'username': 'hudson',
+                                    'password': 'chips'
+                                }
+    )
+    assert loginresponse.status_code == 200
+    data = loginresponse.get_json()
+    assert 'logged in success' in data['message']
+    assert data['loggedIn']
+    token = data['token']
+    assert User.verify_auth_token(token) == u
+
+def test_user_login_no_password_and_no_username(session, client):
+    u = add_user(session)
+    # test no username
+    response = client.post(
+                            url_for('users.login'),
+                            data={
+                                'username': '',
+                                'password': 'chips'
+                            }
+    )
+    assert response.status_code == 200
+    data = response.get_json()
+    assert 'field missing' in data['message']
+    assert data['token'] is None
+    # test no password
+    response = client.post(
+                            url_for('users.login'),
+                            data={
+                                'username':'hudson',
+                                'password': ''
+                            }
+    )
+    assert response.status_code == 200
+    data = response.get_json()
+    assert 'field missing' in data['message']
+    assert data['token'] is None
+
+def test_user_cannot_login_with_wrong_pword(session, client):
+    u = add_user(session)
+    login_data = {'username': 'hudson', 'password':'wrong'}
+    response = client.post(url_for('users.login'), data=login_data)
+    assert response.status_code == 200
+    data = response.get_json()
+    assert 'invalid password' in data['message']
+    assert not data['loggedIn']
+    assert data['token'] is None

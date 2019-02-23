@@ -46,3 +46,29 @@ def create_new_user():
     response['token'] = token.decode('utf-8')
     response['message'] = 'success'
     return jsonify(response)
+
+
+@users_blueprint.route('/users/login', methods=['POST'])
+def login():
+    response = {
+                'token': None,
+                'message': 'Error',
+                'loggedIn': False
+                }
+    data = request.form
+    username, password = [request.form.get(i) for i in ['username', 'password']]
+    if username == '' or password == '':
+        response['message'] = 'field missing'
+        return jsonify(response)
+    # Get user
+    u = User.query.filter_by(username=username).first()
+    # check password
+    if not u.check_password(password):
+        response['message'] = 'invalid password'
+        return jsonify(response)
+    # generate a token
+    token = u.generate_auth_token().decode('utf-8')
+    response['token'] = token
+    response['loggedIn'] = True
+    response['message'] = 'logged in success'
+    return jsonify(response)
