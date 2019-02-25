@@ -72,3 +72,7 @@ def login():
     response['loggedIn'] = True
     response['message'] = 'logged in success'
     return jsonify(response)
+
+@users_blueprint.route('/users/get-recipeLists')
+def get_recipe_lists():
+    pass
