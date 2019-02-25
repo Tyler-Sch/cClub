@@ -9,14 +9,14 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 # need to set SECRET_KEY
 recipe_list_user_list = db.Table(
-                            'recipe_list_user',
+                            'recipe_list_user_list',
                             db.Column(
                                     'user_id',
                                     db.Integer,
                                     db.ForeignKey('users.id'),
                                     primary_key=True
                             ),db.Column(
-                                    'recipe_list_id',
+                                    'recipelist_id',
                                     db.Integer,
                                     db.ForeignKey('recipelist.id'),
                                     primary_key=True
@@ -36,7 +36,8 @@ class User(db.Model):
     recipe_lists = db.relationship(
         "RecipeList",
         secondary=recipe_list_user_list,
-        back_populates='users')
+        lazy='subquery',
+        backref='users')
 
     def __init__(self, username, email, password):
         self.username = username
@@ -70,14 +71,22 @@ class RecipeList(db.Model):
     list_creator = db.Column(db.Integer, db.ForeignKey('users.id'))
     list_name = db.Column(db.Text, nullable=False)
     created_date = db.Column(db.DateTime, default=func.now(), nullable=False)
-    recipes = db.relationship("RecipeTable", back_populates="recipelist")
-    users = db.relationship(
-        "User",
-        secondary=recipe_list_user_list,
-        back_populates='recipelist'
-    )
+    recipes = db.relationship("Recipes", backref=db.backref("recipelist"))
 
-class RecipeTable(db.Model):
+
+    ## this box seems not needed 
+    #############################################
+    # users = db.relationship(                  #
+    #     "users",                              #
+    #     secondary=recipe_list_user_list,      #
+    #     backref=db.backref('recipelist')      #
+    # )
+    #############################################
+    def __init__(self, list_creator, list_name):
+        self.list_creator = list_creator
+        self.list_name = list_name
+
+class Recipes(db.Model):
     # need to restrict recipes so you can't add same recipe twice
     # otherwise there would be a conflict for the primary key
     __tablename__ = 'recipes'
@@ -86,6 +95,11 @@ class RecipeTable(db.Model):
                             primary_key=True, nullable=False)
     recipe_id = db.Column(db.Integer, primary_key=True, nullable=False)
     date_added = db.Column(db.DateTime, default=func.now(), nullable=False)
+    added_by = db.Column(db.Integer, db.ForeignKey('users.id'))
+
+    def __init__(self, recipe_list_id, recipe_id):
+        self.recipe_list_id = recipe_list_id
+        self.recipe_id = recipe_id
 """
 tables to add:
     Friends:
