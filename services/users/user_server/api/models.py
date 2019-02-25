@@ -74,7 +74,7 @@ class RecipeList(db.Model):
     recipes = db.relationship("Recipes", backref=db.backref("recipelist"))
 
 
-    ## this box seems not needed 
+    ## this box seems not needed
     #############################################
     # users = db.relationship(                  #
     #     "users",                              #
@@ -89,17 +89,21 @@ class RecipeList(db.Model):
 class Recipes(db.Model):
     # need to restrict recipes so you can't add same recipe twice
     # otherwise there would be a conflict for the primary key
+    
+    # also probably need a check to prevent unauthorized user from adding
+    # a recipe
     __tablename__ = 'recipes'
     recipe_list_id = db.Column(
                             db.Integer, db.ForeignKey('recipelist.id'),
                             primary_key=True, nullable=False)
     recipe_id = db.Column(db.Integer, primary_key=True, nullable=False)
     date_added = db.Column(db.DateTime, default=func.now(), nullable=False)
-    added_by = db.Column(db.Integer, db.ForeignKey('users.id'))
+    added_by = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
 
-    def __init__(self, recipe_list_id, recipe_id):
+    def __init__(self, recipe_list_id, recipe_id, added_by):
         self.recipe_list_id = recipe_list_id
         self.recipe_id = recipe_id
+        self.added_by = added_by
 """
 tables to add:
     Friends:
@@ -115,24 +119,10 @@ tables to add:
             - list name
             - list id
 
-    recipe list:
-        list of ids from recipe database
-        - table columns:
-            - recipe id
-            - user id
-            - recipe list
-            - is shared
-            - list name
-
     grocery list share:
         list of grocery lists with the people they are shared with
         - table columns:
             - grocery list id
-            - user id
-
-    recipe list share:
-        - table columns:
-            - recipe list id
             - user id
 
 
