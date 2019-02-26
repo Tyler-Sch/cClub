@@ -16,7 +16,8 @@ def create_new_user():
         'token': None,
         'message': 'pending'
     }
-    data = request.form
+    #data = request.form
+    data = request.get_json()
     headings = ['username', 'password', 'email']
     information = {i: data.get(i) for i in headings}
 
@@ -55,8 +56,9 @@ def login():
                 'message': 'Error',
                 'loggedIn': False
                 }
-    data = request.form
-    username, password = [request.form.get(i) for i in ['username', 'password']]
+    data = request.get_json()
+    #username, password = [request.form.get(i) for i in ['username', 'password']]
+    username, password = [data.get(i) for i in ['username', 'password']]
     if username == '' or password == '':
         response['message'] = 'field missing'
         return jsonify(response)
