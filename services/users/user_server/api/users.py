@@ -3,6 +3,7 @@ from user_server.userServer import db
 from flask import jsonify, request
 from user_server.api.models import User
 users_blueprint = Blueprint('users', __name__)
+from user_server.api.logindecorator import login_required
 
 @users_blueprint.route('/')
 def index():
@@ -16,7 +17,6 @@ def create_new_user():
         'token': None,
         'message': 'pending'
     }
-    #data = request.form
     data = request.get_json()
     headings = ['username', 'password', 'email']
     information = {i: data.get(i) for i in headings}
@@ -57,7 +57,6 @@ def login():
                 'loggedIn': False
                 }
     data = request.get_json()
-    #username, password = [request.form.get(i) for i in ['username', 'password']]
     username, password = [data.get(i) for i in ['username', 'password']]
     if username == '' or password == '':
         response['message'] = 'field missing'
@@ -75,6 +74,7 @@ def login():
     response['message'] = 'logged in success'
     return jsonify(response)
 
-@users_blueprint.route('/users/get-recipeLists')
+@users_blueprint.route('/users/get-recipeLists', methods=['POST'])
+@login_required
 def get_recipe_lists():
-    pass
+    return jsonify({'message': 'working'})
