@@ -115,7 +115,20 @@ def create_recipe_list():
 @users_blueprint.route('/users/get-recipeLists', methods=['GET'])
 @login_required
 def get_recipe_lists():
-    return jsonify({'message': 'working'})
+    user = g.user
+    current_recipe_lists = user.recipe_lists
+    recipe_lists = []
+    for list_ in current_recipe_lists:
+        l = {}
+        l['listName'] = list_.list_name
+        l['creator'] = list_.list_creator
+        l['createdDate'] = list_.created_date
+        l['recipes'] = list_.recipes
+        l['users'] = [[u.id, u.username] for u in list_.users]
+        recipe_lists.append(l)
+    return jsonify({
+        'recipeList': recipe_lists
+    })
 
 @users_blueprint.route('/users/get-recipes-from-list', methods=['GET'])
 @login_required
