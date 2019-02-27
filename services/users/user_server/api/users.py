@@ -1,7 +1,7 @@
 from flask import Blueprint
 from user_server.userServer import db
 from flask import jsonify, request, g
-from user_server.api.models import User
+from user_server.api.models import User, RecipeList, Recipes
 users_blueprint = Blueprint('users', __name__)
 from user_server.api.logindecorator import login_required
 
@@ -79,12 +79,45 @@ def login():
 def loginreq():
     return jsonify({'message': 'working', 'user': g.user.id})
 
+
+@users_blueprint.route('/users/create-new-recipe-list', methods=['POST'])
+@login_required
+def create_recipe_list():
+    """
+        needs json object with following information:
+            - list_name (recipeListName)
+            - can contain recipes to add in a list of int form (recipes)
+
+        are there any other errors I need to account for here? Could add
+        general catch for the entire block...
+    """
+    data = request.get_json()
+    user = g.user
+    recipe_list_name = data.get('recipeListName')
+    new_recipe_list = RecipeList(list_creator=user.id, list_name=recipe_list_name)
+    db.session.add(new_recipe_list)
+    db.session.commit()
+    for recipe_id in data.get('recipes'):
+        new_recipe = Recipes(
+                            recipe_list_id=new_recipe_list.id,
+                            recipe_id=recipe_id,
+                            added_by=user.id
+        )
+        db.session.add(new_recipe)
+
+    if data.get('recipes'): db.session.commit()
+    # need to fix the grammar on that message
+    return jsonify({
+        'status': 'success',
+        'message': f'{recipe_list_name} added to {user.username} list'
+    })
+
 @users_blueprint.route('/users/get-recipeLists', methods=['POST'])
 @login_required
 def get_recipe_lists():
     return jsonify({'message': 'working'})
 
-@users_blueprint.route('/users/create-new-recipe-list', methods=['POST'])
+@users_blueprint.route('/users/get-recipes-from-list', methods=['GET'])
 @login_required
-def create_recipe_list():
-    return jsonify({'message':'working'})
+def get_recipes_from_list():
+    pass
