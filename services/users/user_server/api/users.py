@@ -115,6 +115,8 @@ def create_recipe_list():
 @users_blueprint.route('/users/get-recipeLists', methods=['GET'])
 @login_required
 def get_recipe_lists():
+    # maybe divide this up so this endpoint doesnt return recipes
+    # dont know how big lists would get
     user = g.user
     current_recipe_lists = user.recipe_lists
     recipe_lists = []
