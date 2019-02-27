@@ -24,9 +24,11 @@ def test_create_recipe_list_endpoint(client, session):
     assert response.status_code == 200
     data = response.get_json()
     assert data.get('status') == 'success'
-    assert data.get('message') == 'test list added to hudson list'
-    assert RecipeList.query.first().list_name == 'test list'
-    assert RecipeList.query.first().list_creator == user_id
+    assert data.get('message') == 'hudson added test list'
+    recipe_list = RecipeList.query.first()
+    assert recipe_list.list_name == 'test list'
+    assert recipe_list.list_creator == user_id
+    assert recipe_list.id == data.get('recipeListId')
 
 def test_create_recipe_list_with_recipes(client,session):
     create_data = [session, 'hudson', 'fox@test.com','asdfad', client]
@@ -47,12 +49,15 @@ def test_create_recipe_list_with_recipes(client,session):
     assert response.status_code == 200
     data = response.get_json()
     assert data.get('status') == 'success'
-    assert data.get('message') == 'test list added to hudson list'
-    assert RecipeList.query.first().list_name == 'test list'
-    assert RecipeList.query.first().list_creator == user_id
+    assert data.get('message') == 'hudson added test list'
+    recipe_list = RecipeList.query.first()
+    assert recipe_list.list_name == 'test list'
+    assert recipe_list.list_creator == user_id
+    assert recipe_list.id == data.get('recipeListId')
     assert len(list(Recipes.query.all())) == 3
     assert Recipes.query.first().added_by == user_id
     assert Recipes.query.first().recipe_id == 123
+
 
 def test_create_recipe_endpoint_no_token(client, session):
     create_data = [session, 'hudson', 'fox@test.com','asdfad', client]

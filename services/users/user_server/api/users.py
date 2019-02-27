@@ -106,13 +106,13 @@ def create_recipe_list():
         db.session.add(new_recipe)
 
     if data.get('recipes'): db.session.commit()
-    # need to fix the grammar on that message
     return jsonify({
         'status': 'success',
-        'message': f'{recipe_list_name} added to {user.username} list'
+        'message': f'{user.username} added {recipe_list_name}',
+        'recipeListId': new_recipe_list.id
     })
 
-@users_blueprint.route('/users/get-recipeLists', methods=['POST'])
+@users_blueprint.route('/users/get-recipeLists', methods=['GET'])
 @login_required
 def get_recipe_lists():
     return jsonify({'message': 'working'})
