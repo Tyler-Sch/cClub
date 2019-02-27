@@ -9,18 +9,19 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 # need to set SECRET_KEY
 recipe_list_user_list = db.Table(
-                            'recipe_list_user_list',
-                            db.Column(
-                                    'user_id',
-                                    db.Integer,
-                                    db.ForeignKey('users.id'),
-                                    primary_key=True
-                            ),db.Column(
-                                    'recipelist_id',
-                                    db.Integer,
-                                    db.ForeignKey('recipelist.id'),
-                                    primary_key=True
-                            )
+    'recipe_list_user_list',
+    db.Column(
+        'user_id',
+        db.Integer,
+        db.ForeignKey('users.id'),
+        primary_key=True
+    ),
+    db.Column(
+        'recipelist_id',
+        db.Integer,
+        db.ForeignKey('recipelist.id'),
+        primary_key=True
+    )
 )
 
 
@@ -89,7 +90,7 @@ class RecipeList(db.Model):
 class Recipes(db.Model):
     # need to restrict recipes so you can't add same recipe twice
     # otherwise there would be a conflict for the primary key
-    
+
     # also probably need a check to prevent unauthorized user from adding
     # a recipe
     __tablename__ = 'recipes'

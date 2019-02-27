@@ -1,6 +1,6 @@
 from flask import Blueprint
 from user_server.userServer import db
-from flask import jsonify, request
+from flask import jsonify, request, g
 from user_server.api.models import User
 users_blueprint = Blueprint('users', __name__)
 from user_server.api.logindecorator import login_required
@@ -74,7 +74,17 @@ def login():
     response['message'] = 'logged in success'
     return jsonify(response)
 
+@users_blueprint.route('/test/logindec', methods=['GET'])
+@login_required
+def loginreq():
+    return jsonify({'message': 'working', 'user': g.user.id})
+
 @users_blueprint.route('/users/get-recipeLists', methods=['POST'])
 @login_required
 def get_recipe_lists():
     return jsonify({'message': 'working'})
+
+@users_blueprint.route('/users/create-new-recipe-list', methods=['POST'])
+@login_required
+def create_recipe_list():
+    return jsonify({'message':'working'})

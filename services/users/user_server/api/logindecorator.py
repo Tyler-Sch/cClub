@@ -12,7 +12,7 @@ def login_required(fn):
                 'message': 'must be logged in'
             }), 401
         else:
-            u = User.verify_auth_token(token)
+            u = User.verify_auth_token(auth_token)
             if u is not None:
                 g.user = u
             else:
@@ -22,5 +22,5 @@ def login_required(fn):
                 }
                 return jsonify(response), 401
 
-            return fn(*arg, **kwargs)
+            return fn(*args, **kwargs)
     return wrap
