@@ -53,3 +53,23 @@ def test_create_recipe_list_with_recipes(client,session):
     assert len(list(Recipes.query.all())) == 3
     assert Recipes.query.first().added_by == user_id
     assert Recipes.query.first().recipe_id == 123
+
+def test_create_recipe_endpoint_no_token(client, session):
+    create_data = [session, 'hudson', 'fox@test.com','asdfad', client]
+    user_json = add_user_via_endpoint(*create_data)
+    token = user_json.get('token')
+    user_id = User.query.first().id
+
+    response = client.post(
+                    url_for('users.create_recipe_list'),
+                    data=json.dumps({
+                        'recipeListName': 'test list',
+                        'recipes': [123, 134, 145]
+                    }),
+                    content_type='application/json',
+                    headers={}
+    )
+    assert response.status_code == 401
+    data = response.get_json()
+    assert data.get('status') == 'unauthorized'
+    assert data.get('message') == 'must be logged in'
