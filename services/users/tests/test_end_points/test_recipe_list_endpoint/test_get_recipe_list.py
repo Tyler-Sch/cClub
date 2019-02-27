@@ -80,3 +80,22 @@ def test_multipe_users_can_share_recipe_list(session, client):
     assert len(data['users']) == 2
     assert [user1.id, user1.username] in data['users']
     assert [user2.id, user2.username] in data['users']
+
+
+def test_recipes_on_list_come_through(session, client):
+    user = add_user(session)
+    recipe_list = add_recipe_list(session, user, 'test list')
+    r1 = Recipes(recipe_list_id=recipe_list.id, recipe_id=123, added_by=user.id)
+    session.add(r1)
+    session.commit()
+    token = user.generate_auth_token()
+
+    response = client.get(
+                        url_for('users.get_recipe_lists'),
+                        headers={'Authorization': token}
+    )
+
+    assert response.status_code == 200
+    data = response.get_json()['recipeList'][0]
+    assert len(data['recipes']) == 1
+    assert 123 in data['recipes']

@@ -123,7 +123,7 @@ def get_recipe_lists():
         l['listName'] = list_.list_name
         l['creator'] = list_.list_creator
         l['createdDate'] = list_.created_date
-        l['recipes'] = list_.recipes
+        l['recipes'] = [r.recipe_id for r in list_.recipes]
         l['users'] = [[u.id, u.username] for u in list_.users]
         recipe_lists.append(l)
     return jsonify({
