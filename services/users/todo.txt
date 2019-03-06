@@ -1,0 +1,2 @@
+- need to handle someone who tries to login with who has
+    not created a user

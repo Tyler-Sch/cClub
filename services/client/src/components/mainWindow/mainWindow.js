@@ -27,6 +27,7 @@ const MainWindow = (props) => {
               <li><a href="#">Grocery List</a></li>
               <li><a href="#">Friends</a></li>
               <li><a href="#">Filters</a></li>
+              <li><a href="#">Login</a></li>
             </ul>
           </nav>
         </section>

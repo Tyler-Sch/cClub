@@ -2,8 +2,11 @@ from flask import Blueprint
 from user_server.userServer import db
 from flask import jsonify, request, g
 from user_server.api.models import User, RecipeList, Recipes
-users_blueprint = Blueprint('users', __name__)
+from flask_cors import CORS
 from user_server.api.logindecorator import login_required
+
+users_blueprint = Blueprint('users', __name__)
+CORS(users_blueprint)
 
 @users_blueprint.route('/')
 def index():
@@ -12,6 +15,10 @@ def index():
 
 @users_blueprint.route('/users/create-new', methods=['POST'])
 def create_new_user():
+    """
+        takes post request with username, password, and email in json format
+        if success, adds user to database and returns JWT
+    """
     response = {
         'loggedIn': False,
         'token': None,

@@ -4,6 +4,7 @@ import 'bulma';
 import MainWindow from './components/mainWindow/mainWindow';
 import PictureWindow from './components/mainWindow/pictureWindow';
 import RecipeList from './components/recipeList';
+import IngredientSearchBar from './components/head/IngredientSearch'
 
 
 class App extends React.Component {
@@ -32,7 +33,6 @@ class App extends React.Component {
 
     const json = await response.json();
     const currentRecipes = this.state.recipes.slice(0, this.currentRecipe);
-    console.log(currentRecipes)
     this.setState({
       'recipes': [...currentRecipes, ...json.recipes]
     });
@@ -133,25 +133,7 @@ class App extends React.Component {
 }
 
 
-const IngredientSearchBar = (props) => {
-  return (
-    <div className="field has-addons">
-      <div className="control">
-        <input onChange={props.update}
-          className="input"
-          type="text"
-          placeholder="Separate ingredients with comma"
-          value={props.val}
-        />
-      </div>
-      <div className="control">
-        <a onClick={props.submit} className="button is-info">
-          Search
-        </a>
-      </div>
-    </div>
-  )
-}
+
 
 
 

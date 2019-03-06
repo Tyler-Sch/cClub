@@ -100,6 +100,9 @@ class Recipes(db.Model):
     recipe_id = db.Column(db.Integer, primary_key=True, nullable=False)
     date_added = db.Column(db.DateTime, default=func.now(), nullable=False)
     added_by = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    has_cooked = db.Column(db.Boolean, default=False, nullable=False)
+    date_first_cooked = db.Column(db.DateTime, nullable=True)
+
 
     def __init__(self, recipe_list_id, recipe_id, added_by):
         self.recipe_list_id = recipe_list_id
