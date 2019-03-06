@@ -21,7 +21,7 @@ export default function MainWindow(props) {
           <button onClick={props.nextRecipe}>Next Recipe</button>
         </div>
       </div>
-      <Nav />
+      <Nav loggedIn={props.loggedIn} />
     </section>
   );
 }

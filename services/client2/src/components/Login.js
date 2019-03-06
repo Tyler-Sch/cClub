@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Redirect } from 'react-router-dom';
 
-function Login() {
+function Login(props) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
@@ -35,6 +35,7 @@ function Login() {
       const token = data.token;
       sessionStorage.setItem('Authorization', token);
       setRedirect(true);
+      props.switchLogin();
     }
     // handle error
     else {
@@ -43,7 +44,7 @@ function Login() {
   }
   if (!redirect) {
     return(
-      
+
       <div className="section">
         <div className="container">
           <div className="box">

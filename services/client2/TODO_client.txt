@@ -4,3 +4,4 @@
 
 - TESTS
 - take out hard coded url in app
+- Log off

@@ -12,10 +12,12 @@ function ComingSoon() {
   )
 }
 
+
 export default function App(props) {
   const [recipes, setRecipe] = useState([]);
   const [currentRecipe, setCurrent] = useState(0);
   const [loggedIn, setLogin] = useState(false);
+  const [userRecipes,setUserRecipes] = useState([]);
   const numRecipesToFetch = 5;
 
 
@@ -45,19 +47,32 @@ export default function App(props) {
     }
   }
 
+  const addRecipe = () => {
+    if (!userRecipes.includes(recipes[currentRecipe])) {
+      setUserRecipes([...userRecipes, recipes[currentRecipe]])
+    }
+
+  }
+
+
   return (
     <div>
       <h1 className="title">
         CookingClub
       </h1>
       <MainWindow
-        addToRecipeList={() => console.log('add to recipes')}
+        addToRecipeList={addRecipe}
         nextRecipe={cycleRecipes}
         recipe={recipes[currentRecipe]}
         loggedIn={loggedIn}
       />
-    <Route path="/my-recipes/" component={RecipeList} />
-      <Route path="/user/login/" component={Login} />
+      <Route path="/my-recipes/"
+        render={(props) => <RecipeList
+                              currentRecipes={userRecipes} />}
+                              loggedIn={loggedIn}
+                            />
+      <Route path="/user/login/"
+        render={(props) => <Login switchLogin={() => setLogin(true)}/>} />
       <Route path="/grocery-list/" component={ComingSoon} />
       <Route path="/user/friends/" component={ComingSoon} />
       <Route path="/search/filters/" component={ComingSoon} />

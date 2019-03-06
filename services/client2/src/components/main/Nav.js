@@ -12,7 +12,11 @@ export default function Nav(props) {
         <li><Link to="/grocery-list/">Grocery List</Link></li>
         <li><Link to="/user/friends/">Friends</Link></li>
         <li><Link to="/search/filters/">Filters</Link></li>
-        <li><Link to="/user/login/">Login</Link></li>
+        {
+          (props.loggedIn)
+          ? <li><Link to="/Logoff/">Log off</Link></li>
+          :  <li><Link to="/user/login/">Login</Link></li>
+        }
       </ul>
     </nav>
   )
