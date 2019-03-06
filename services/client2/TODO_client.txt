@@ -1,0 +1,6 @@
+- refactor Login.js
+  - can be split into smaller components
+  - need to take out hard coded urls (should use environ variables)
+
+- TESTS
+- take out hard coded url in app
