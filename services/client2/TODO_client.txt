@@ -5,3 +5,4 @@
 - TESTS
 - take out hard coded url in app
 - Log off
+- Change terneary operators to (condition && jsx) format

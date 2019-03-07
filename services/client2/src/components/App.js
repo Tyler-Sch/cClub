@@ -68,8 +68,10 @@ export default function App(props) {
       />
       <Route path="/my-recipes/"
         render={(props) => <RecipeList
-                              currentRecipes={userRecipes} />}
+                              currentRecipes={userRecipes}
                               loggedIn={loggedIn}
+                            />}
+
                             />
       <Route path="/user/login/"
         render={(props) => <Login switchLogin={() => setLogin(true)}/>} />
