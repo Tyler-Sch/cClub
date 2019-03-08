@@ -11,7 +11,6 @@ def test_testing(client):
     assert b'hello world' in response.data
 
 def test_add_user(app, client, session):
-
     args = [session, 'potato', 'chip@example.com', 'chips', client]
     data = add_user_via_endpoint(*args)
     assert User.query.first().username == 'potato'

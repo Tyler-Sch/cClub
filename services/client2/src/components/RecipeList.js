@@ -1,18 +1,100 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+
+
+function Dropdown(props) {
+    // takes props.text for name of button and accepts child arguments
+    // each should be wrapped with <div className="dropdown-item">
+  const [dropdown, setToggle] = useState('')
+  const toggleDropdown = () =>{
+    if (dropdown !== "is-active") {
+      setToggle('is-active');
+    }
+    else {
+      setToggle('');
+    }
+  }
+  return (
+    <div className={["dropdown", dropdown].join(' ')}>
+      <div className="dropdown-trigger">
+        <button className="button" onClick={toggleDropdown} >
+          <span>{props.text}</span>
+        </button>
+      </div>
+      <div className="dropdown-menu" id="dropdown-menu6">
+        <div className="dropdown-content">
+          {props.children}
+        </div>
+      </div>
+    </div>
+  )
+}
+
 
 export default function RecipeList(props) {
-  const [recipeLists, setRecipeList] = useState([]);
 
+  const [newListName, setNewListName] = useState('');
   const currentRecipeList = props.currentRecipes.map((i) => (
     <li key={i.id}><a href={i.url} target="_blank">{i.name}</a></li>
     )
   );
 
-  console.log(props)
+  const createRecipeList = async (e) => {
+    // need to fix hardcoded url
+    e.preventDefault();
+    const data = {
+      recipeListName: newListName,
+      recipes: []
+    }
+    const url = 'http://localhost:5003/users/create-new-recipe-list';
+    console.log(data);
+    const response = await fetch(
+      url,
+      {
+        method: "POST",
+        mode: "cors",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": localStorage.getItem('Authorization')
+        },
+        body: JSON.stringify(data)
+      }
+    )
+    const responseData = await response.json();
+    console.log(responseData)
+    setNewListName('');
+    props.fetchRecipeLists();
+  }
   // should come up with a better way of centering info.
-  // currently it's in an h1 tag
+  // currently it's in an h1 tag which feel oh so wrong
   return (
     <div className="section">
+      <Dropdown text='Lists'>
+        <div className="dropdown-item">
+          <div className="menu">
+            <p className="menu-label">Create new list</p>
+            <ul className="menu-list">
+              <li>
+                <form className="field" onSubmit={createRecipeList}>
+                  <div className="control">
+                    <input
+                      size="7"
+                      type="text"
+                      placeholder=" new list name"
+                      onChange={(e) => setNewListName(e.target.value)}
+                      value={newListName}
+                      />
+                  </div>
+                </form>
+              </li>
+            </ul>
+            <p className="menu-label">ListName</p>
+            <ul className="menu-list">
+              <li>test</li>
+            </ul>
+
+          </div>
+        </div>
+      </Dropdown>
       <h1 className="has-text-centered">
         {!props.loggedIn &&
         <span className="tag is-warning ">please log in to save recipes</span>

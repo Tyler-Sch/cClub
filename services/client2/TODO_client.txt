@@ -6,3 +6,6 @@
 - take out hard coded url in app
 - Log off
 - Change terneary operators to (condition && jsx) format
+
+- deal with errors from fetch requests
+- make main app check if logged in

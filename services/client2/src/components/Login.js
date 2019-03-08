@@ -33,7 +33,7 @@ function Login(props) {
     // check if login success before saving token
     if (data.loggedIn) {
       const token = data.token;
-      sessionStorage.setItem('Authorization', token);
+      localStorage.setItem('Authorization', token);
       setRedirect(true);
       props.switchLogin();
     }

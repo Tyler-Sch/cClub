@@ -113,6 +113,8 @@ def create_recipe_list():
         db.session.add(new_recipe)
 
     if data.get('recipes'): db.session.commit()
+    user.recipe_lists.append(new_recipe_list)
+    db.session.commit()
     return jsonify({
         'status': 'success',
         'message': f'{user.username} added {recipe_list_name}',
