@@ -33,10 +33,7 @@ function Dropdown(props) {
 export default function RecipeList(props) {
 
   const [newListName, setNewListName] = useState('');
-  const currentRecipeList = props.currentRecipes.map((i) => (
-    <li key={i.id}><a href={i.url} target="_blank">{i.name}</a></li>
-    )
-  );
+
 
   const createRecipeList = async (e) => {
     // need to fix hardcoded url
@@ -64,6 +61,13 @@ export default function RecipeList(props) {
     setNewListName('');
     props.fetchRecipeLists();
   }
+
+  const currentRecipeList = props.currentRecipes.map((i) => (
+    <li key={i.id}><a href={i.url} target="_blank">{i.name}</a></li>
+    )
+  );
+
+
   // should come up with a better way of centering info.
   // currently it's in an h1 tag which feel oh so wrong
   return (
@@ -89,7 +93,12 @@ export default function RecipeList(props) {
             </ul>
             <p className="menu-label">ListName</p>
             <ul className="menu-list">
-              <li>test</li>
+              {
+                (props.recipelists.length > 0) && props.recipelists.map((i, idx) => (
+                  <li key={idx}>{i.listName}</li>
+                ))}
+
+
             </ul>
 
           </div>

@@ -20,16 +20,21 @@ export default function App(props) {
   const [userRecipes, setUserRecipes] = useState([]);
   const [userRecipeList, setUserRecipeList] = useState([]);
   const numRecipesToFetch = 5;
+  const [firstLoad, setFirstLoad] = useState(true);
 
 
   useEffect(() => {
     // fetch starting recipes
-    if (recipes.length < numRecipesToFetch){
+    if (firstLoad){
     console.log('firing fetch random recipes');
-    const new_recipes = fetchRandomRecipes(numRecipesToFetch);
+    fetchRandomRecipes(numRecipesToFetch);
+    fetchRecipeLists();
     }
 
+    setFirstLoad(false);
   })
+
+
 
   const fetchRandomRecipes = async (numRecipes) => {
     const response = await fetch(
@@ -49,7 +54,8 @@ export default function App(props) {
 
   const addRecipe = () => {
     if (!userRecipes.includes(recipes[currentRecipe])) {
-      setUserRecipes([...userRecipes, recipes[currentRecipe]])
+      setUserRecipes([...userRecipes, recipes[currentRecipe]]);
+      console.log(userRecipes);
     }
   }
   const fetchRecipeLists = async () => {
@@ -58,7 +64,10 @@ export default function App(props) {
       'http://localhost:5003/users/get-recipeLists',
       'GET'
     )
-    setUserRecipeList(response.recipeList);
+    if (response.recipeList != undefined){
+
+      setUserRecipeList(response.recipeList);
+    }
     console.log(userRecipeList);
   }
 
@@ -96,6 +105,7 @@ export default function App(props) {
                               currentRecipes={userRecipes}
                               loggedIn={loggedIn}
                               fetchRecipeLists={fetchRecipeLists}
+                              recipelists={userRecipeList}
                             />}
 
                             />
