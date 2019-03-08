@@ -1,39 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
+import protectedFetch from './helpers';
+import Dropdown from './standardComps/Dropdown';
 
-
-function Dropdown(props) {
-    // takes props.text for name of button and accepts child arguments
-    // each should be wrapped with <div className="dropdown-item">
-  const [dropdown, setToggle] = useState('')
-  const toggleDropdown = () =>{
-    if (dropdown !== "is-active") {
-      setToggle('is-active');
-    }
-    else {
-      setToggle('');
-    }
-  }
-  return (
-    <div className={["dropdown", dropdown].join(' ')}>
-      <div className="dropdown-trigger">
-        <button className="button" onClick={toggleDropdown} >
-          <span>{props.text}</span>
-        </button>
-      </div>
-      <div className="dropdown-menu" id="dropdown-menu6">
-        <div className="dropdown-content">
-          {props.children}
-        </div>
-      </div>
-    </div>
-  )
-}
 
 
 export default function RecipeList(props) {
 
   const [newListName, setNewListName] = useState('');
-
 
   const createRecipeList = async (e) => {
     // need to fix hardcoded url
@@ -44,19 +17,7 @@ export default function RecipeList(props) {
     }
     const url = 'http://localhost:5003/users/create-new-recipe-list';
     console.log(data);
-    const response = await fetch(
-      url,
-      {
-        method: "POST",
-        mode: "cors",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": localStorage.getItem('Authorization')
-        },
-        body: JSON.stringify(data)
-      }
-    )
-    const responseData = await response.json();
+    const responseData = await protectedFetch(url, 'POST', data);
     console.log(responseData)
     setNewListName('');
     props.fetchRecipeLists();

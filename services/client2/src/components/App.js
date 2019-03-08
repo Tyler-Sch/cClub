@@ -3,6 +3,7 @@ import MainWindow from './main/MainWindow';
 import Login from './Login';
 import RecipeList from './RecipeList';
 import { Route } from 'react-router-dom';
+import protectedFetch from './helpers';
 
 function ComingSoon() {
   return (
@@ -19,26 +20,44 @@ export default function App(props) {
   const [loggedIn, setLogin] = useState(false);
   const [userRecipes, setUserRecipes] = useState([]);
   const [userRecipeList, setUserRecipeList] = useState([]);
-  const numRecipesToFetch = 5;
   const [firstLoad, setFirstLoad] = useState(true);
+  const numRecipesToFetch = 5;
+  const userUrlPrefix = "http://localhost:5003/";
+  const recipeUrlPrefix = "http://localhost:5000/"
 
 
   useEffect(() => {
     // fetch starting recipes
     if (firstLoad){
-    console.log('firing fetch random recipes');
     fetchRandomRecipes(numRecipesToFetch);
+    if (localStorage.getItem('Authorization') !== null) {
+      // test if login token still ok and renew
+      checkLoggedIn();
+    }
     fetchRecipeLists();
     }
 
     setFirstLoad(false);
   })
 
+  const checkLoggedIn = async () => {
+    console.log('checking for login')
+    const url = userUrlPrefix + 'users/check-login';
+    console.log(url);
+    const response = await protectedFetch(url, 'GET');
+    if (response.loggedIn === true) {
+      console.log("user is logged in");
+      setLogin(true);
+      localStorage.setItem('Authorization', response.token);
+    }
+  }
 
 
   const fetchRandomRecipes = async (numRecipes) => {
+    const url = recipeUrlPrefix + `recipes/random/${numRecipes}`;
+    console.log(url);
     const response = await fetch(
-      `http://localhost:5000/recipes/random/${numRecipes}`
+      url
     );
     const data = await response.json();
     setRecipe([...recipes,...data.recipes])
@@ -59,35 +78,13 @@ export default function App(props) {
     }
   }
   const fetchRecipeLists = async () => {
-    console.log('Trying to fetch recipes');
-    const response = await ProtectedFetch(
-      'http://localhost:5003/users/get-recipeLists',
-      'GET'
-    )
+    const url = userUrlPrefix + 'users/get-recipeLists';
+    const response = await protectedFetch(url,'GET')
     if (response.recipeList != undefined){
-
       setUserRecipeList(response.recipeList);
     }
-    console.log(userRecipeList);
   }
 
-  const ProtectedFetch = async (url, method, data = {}) => {
-    const response = await fetch(
-      url,
-      {
-        method: method,
-        mode: "cors",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": localStorage.getItem('Authorization')
-        },
-        body: null
-      }
-    )
-    const response_data = await response.json();
-    // think I need something to catch an error here
-    return response_data
-  }
 
   return (
     <div>

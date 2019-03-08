@@ -9,3 +9,4 @@
 
 - deal with errors from fetch requests
 - make main app check if logged in
+- html for invalid username/password

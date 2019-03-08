@@ -12,6 +12,14 @@ CORS(users_blueprint)
 def index():
     return 'hello world'
 
+@users_blueprint.route('/users/check-login', methods=['GET'])
+@login_required
+def check_logged_in():
+    # if this function fires then it's past the login required decorator
+    return jsonify({
+        'loggedIn': True,
+        'token':g.user.generate_auth_token().decode('utf-8')
+        })
 
 @users_blueprint.route('/users/create-new', methods=['POST'])
 def create_new_user():
