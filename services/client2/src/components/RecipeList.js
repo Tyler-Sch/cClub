@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect, useRef } from 'react';
 import protectedFetch from './helpers';
 import Dropdown from './standardComps/Dropdown';
-import { UserContext } from './User';
+
 
 
 export default function RecipeList(props) {
@@ -27,9 +27,7 @@ export default function RecipeList(props) {
     <li key={i.id}><a href={i.url} target="_blank">{i.name}</a></li>
     )
   );
-  const [tempName, changeTempName] = useState('');
-  const v = useContext(UserContext);
-  console.log(v.loggedIn);
+
   // should come up with a better way of centering info.
   // currently it's in an h1 tag which feel oh so wrong
   return (

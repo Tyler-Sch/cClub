@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import PictureWindow from './PictureWindow';
 import Nav from './Nav';
+import { AppContext } from '../stores/AppProvider';
 
 export default function MainWindow(props) {
-  // console.log(props)
+  const { changeRecipe, targetRecipe, currentRecipe } = useContext(AppContext);
+  
   return (
     <section className="box">
       <div className="columns">
@@ -12,13 +14,13 @@ export default function MainWindow(props) {
         </div>
         <div className="column">
           {
-          (props.recipe !== undefined)
-          ? <PictureWindow recipe={props.recipe} />
+          (targetRecipe !== undefined)
+          ? <PictureWindow recipe={targetRecipe} />
         : <div>Loading</div>
           }
         </div>
         <div className="column is-one-fifth">
-          <button onClick={props.nextRecipe}>Next Recipe</button>
+          <button onClick={() => changeRecipe(currentRecipe + 1)}>Next Recipe</button>
         </div>
       </div>
       <Nav loggedIn={props.loggedIn} />

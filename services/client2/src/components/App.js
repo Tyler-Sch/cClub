@@ -4,7 +4,9 @@ import Login from './Login';
 import RecipeList from './RecipeList';
 import { Route } from 'react-router-dom';
 import protectedFetch from './helpers';
-import User from './User';
+
+
+
 function ComingSoon() {
   return (
     <div>
@@ -29,7 +31,7 @@ export default function App(props) {
   useEffect(() => {
     // fetch starting recipes
     if (firstLoad){
-    fetchRandomRecipes(numRecipesToFetch);
+    // fetchRandomRecipes(numRecipesToFetch);
     if (localStorage.getItem('Authorization') !== null) {
       // test if login token still ok and renew
       checkLoggedIn();
@@ -53,23 +55,23 @@ export default function App(props) {
   }
 
 
-  const fetchRandomRecipes = async (numRecipes) => {
-    const url = recipeUrlPrefix + `recipes/random/${numRecipes}`;
-    console.log(url);
-    const response = await fetch(
-      url
-    );
-    const data = await response.json();
-    setRecipe([...recipes,...data.recipes])
-  }
-
-  const cycleRecipes = () => {
-    // fetches new recipes when needed
-    setCurrent(currentRecipe + 1);
-    if(currentRecipe + 2 === recipes.length) {
-      fetchRandomRecipes(numRecipesToFetch);
-    }
-  }
+  // const fetchRandomRecipes = async (numRecipes) => {
+  //   const url = recipeUrlPrefix + `recipes/random/${numRecipes}`;
+  //   console.log(url);
+  //   const response = await fetch(
+  //     url
+  //   );
+  //   const data = await response.json();
+  //   setRecipe([...recipes,...data.recipes])
+  // }
+  //
+  // const cycleRecipes = () => {
+  //   // fetches new recipes when needed
+  //   setCurrent(currentRecipe + 1);
+  //   if(currentRecipe + 2 === recipes.length) {
+  //     fetchRandomRecipes(numRecipesToFetch);
+  //   }
+  // }
 
   const addRecipe = () => {
     if (!userRecipes.includes(recipes[currentRecipe])) {
@@ -88,31 +90,29 @@ export default function App(props) {
 
   return (
     <div>
-     <User>
-      <h1 className="title">
-        CookingClub
-      </h1>
-      <MainWindow
-        addToRecipeList={addRecipe}
-        nextRecipe={cycleRecipes}
-        recipe={recipes[currentRecipe]}
-        loggedIn={loggedIn}
-      />
-      <Route path="/my-recipes/"
-        render={(props) => <RecipeList
-                              currentRecipes={userRecipes}
-                              loggedIn={loggedIn}
-                              fetchRecipeLists={fetchRecipeLists}
-                              recipelists={userRecipeList}
-                            />}
 
-                            />
-      <Route path="/user/login/"
-        render={(props) => <Login switchLogin={() => setLogin(true)}/>} />
-      <Route path="/grocery-list/" component={ComingSoon} />
-      <Route path="/user/friends/" component={ComingSoon} />
-      <Route path="/search/filters/" component={ComingSoon} />
-      </User>
+        <h1 className="title">
+          CookingClub
+        </h1>
+        <MainWindow
+          addToRecipeList={addRecipe}
+          loggedIn={loggedIn}
+        />
+        <Route path="/my-recipes/"
+          render={(props) => <RecipeList
+                                currentRecipes={userRecipes}
+                                loggedIn={loggedIn}
+                                fetchRecipeLists={fetchRecipeLists}
+                                recipelists={userRecipeList}
+                              />}
+
+                              />
+        <Route path="/user/login/"
+          render={(props) => <Login switchLogin={() => setLogin(true)}/>} />
+        <Route path="/grocery-list/" component={ComingSoon} />
+        <Route path="/user/friends/" component={ComingSoon} />
+        <Route path="/search/filters/" component={ComingSoon} />
+
     </div>
   )
 }
