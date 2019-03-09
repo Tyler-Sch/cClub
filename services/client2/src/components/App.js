@@ -4,7 +4,7 @@ import Login from './Login';
 import RecipeList from './RecipeList';
 import { Route } from 'react-router-dom';
 import protectedFetch from './helpers';
-
+import User from './User';
 function ComingSoon() {
   return (
     <div>
@@ -88,6 +88,7 @@ export default function App(props) {
 
   return (
     <div>
+     <User>
       <h1 className="title">
         CookingClub
       </h1>
@@ -111,6 +112,7 @@ export default function App(props) {
       <Route path="/grocery-list/" component={ComingSoon} />
       <Route path="/user/friends/" component={ComingSoon} />
       <Route path="/search/filters/" component={ComingSoon} />
+      </User>
     </div>
   )
 }
