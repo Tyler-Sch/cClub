@@ -1,6 +1,7 @@
 
 
-const protectedFetch = async (url, method, data = {}) => {
+const protectedFetch = async (url, method, data = null) => {
+  console.log(data);
   const response = await fetch(
     url,
     {
@@ -10,7 +11,7 @@ const protectedFetch = async (url, method, data = {}) => {
         "Content-Type": "application/json",
         "Authorization": localStorage.getItem('Authorization')
       },
-      body: null
+      body: (data != null) ? JSON.stringify(data) : null
     }
   )
   const response_data = await response.json();

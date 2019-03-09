@@ -1,12 +1,17 @@
 import React, { useContext, useState, useEffect, useRef } from 'react';
 import protectedFetch from './helpers';
 import Dropdown from './standardComps/Dropdown';
-
+import { UserContext } from './stores/UserStore';
 
 
 export default function RecipeList(props) {
 
   const [newListName, setNewListName] = useState('');
+  const {
+    userRecipes,
+    fetchRecipeLists,
+    userRecipeList,
+    userUrlPrefix } = useContext(UserContext);
 
   const createRecipeList = async (e) => {
     // need to fix hardcoded url
@@ -15,15 +20,15 @@ export default function RecipeList(props) {
       recipeListName: newListName,
       recipes: []
     }
-    const url = 'http://localhost:5003/users/create-new-recipe-list';
+    const url = userUrlPrefix + 'users/create-new-recipe-list';
     console.log(data);
     const responseData = await protectedFetch(url, 'POST', data);
-    console.log(responseData)
+    console.log(responseData);
     setNewListName('');
-    props.fetchRecipeLists();
+    fetchRecipeLists();
   }
 
-  const currentRecipeList = props.currentRecipes.map((i) => (
+  const currentRecipeList = userRecipes.map((i) => (
     <li key={i.id}><a href={i.url} target="_blank">{i.name}</a></li>
     )
   );
@@ -54,7 +59,7 @@ export default function RecipeList(props) {
             <p className="menu-label">ListName</p>
             <ul className="menu-list">
               {
-                (props.recipelists.length > 0) && props.recipelists.map((i, idx) => (
+                (userRecipeList.length > 0) && userRecipeList.map((i, idx) => (
                   <li key={idx}>{i.listName}</li>
                 ))}
 
@@ -75,7 +80,7 @@ export default function RecipeList(props) {
       </ul>
 
       {
-        props.currentRecipes.length > 0 && props.loggedIn &&
+        userRecipeList.length > 0 && props.loggedIn &&
         <button className="button is-dark is-small is-hover">Save recipe list</button>
       }
     </h1>

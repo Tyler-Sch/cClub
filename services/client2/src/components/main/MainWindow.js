@@ -2,15 +2,17 @@ import React, { useContext } from 'react';
 import PictureWindow from './PictureWindow';
 import Nav from './Nav';
 import { AppContext } from '../stores/AppProvider';
+import { UserContext } from '../stores/UserStore';
 
 export default function MainWindow(props) {
   const { changeRecipe, targetRecipe, currentRecipe } = useContext(AppContext);
-  
+  const { setUserRecipes, userRecipes, addRecipe } = useContext(UserContext);
+
   return (
     <section className="box">
       <div className="columns">
         <div className="column is-one-fifth">
-          <button onClick={props.addToRecipeList}>Add this recipe</button>
+          <button onClick={() => addRecipe(targetRecipe)}>Add this recipe</button>
         </div>
         <div className="column">
           {

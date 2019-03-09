@@ -17,15 +17,15 @@ function ComingSoon() {
 
 
 export default function App(props) {
-  const [recipes, setRecipe] = useState([]);
-  const [currentRecipe, setCurrent] = useState(0);
+  // const [recipes, setRecipe] = useState([]);
+  // const [currentRecipe, setCurrent] = useState(0);
   const [loggedIn, setLogin] = useState(false);
-  const [userRecipes, setUserRecipes] = useState([]);
-  const [userRecipeList, setUserRecipeList] = useState([]);
+  // const [userRecipes, setUserRecipes] = useState([]);
+  // const [userRecipeList, setUserRecipeList] = useState([]);
   const [firstLoad, setFirstLoad] = useState(true);
-  const numRecipesToFetch = 5;
+  // const numRecipesToFetch = 5;
   const userUrlPrefix = "http://localhost:5003/";
-  const recipeUrlPrefix = "http://localhost:5000/"
+  // const recipeUrlPrefix = "http://localhost:5000/"
 
 
   useEffect(() => {
@@ -36,7 +36,7 @@ export default function App(props) {
       // test if login token still ok and renew
       checkLoggedIn();
     }
-    fetchRecipeLists();
+    //fetchRecipeLists();
     }
 
     setFirstLoad(false);
@@ -73,19 +73,19 @@ export default function App(props) {
   //   }
   // }
 
-  const addRecipe = () => {
-    if (!userRecipes.includes(recipes[currentRecipe])) {
-      setUserRecipes([...userRecipes, recipes[currentRecipe]]);
-      console.log(userRecipes);
-    }
-  }
-  const fetchRecipeLists = async () => {
-    const url = userUrlPrefix + 'users/get-recipeLists';
-    const response = await protectedFetch(url,'GET')
-    if (response.recipeList != undefined){
-      setUserRecipeList(response.recipeList);
-    }
-  }
+  // const addRecipe = () => {
+  //   if (!userRecipes.includes(recipes[currentRecipe])) {
+  //     setUserRecipes([...userRecipes, recipes[currentRecipe]]);
+  //     console.log(userRecipes);
+  //   }
+  // }
+  // const fetchRecipeLists = async () => {
+  //   const url = userUrlPrefix + 'users/get-recipeLists';
+  //   const response = await protectedFetch(url,'GET')
+  //   if (response.recipeList != undefined){
+  //     setUserRecipeList(response.recipeList);
+  //   }
+  // }
 
 
   return (
@@ -95,18 +95,13 @@ export default function App(props) {
           CookingClub
         </h1>
         <MainWindow
-          addToRecipeList={addRecipe}
           loggedIn={loggedIn}
         />
         <Route path="/my-recipes/"
           render={(props) => <RecipeList
-                                currentRecipes={userRecipes}
                                 loggedIn={loggedIn}
-                                fetchRecipeLists={fetchRecipeLists}
-                                recipelists={userRecipeList}
                               />}
-
-                              />
+        />
         <Route path="/user/login/"
           render={(props) => <Login switchLogin={() => setLogin(true)}/>} />
         <Route path="/grocery-list/" component={ComingSoon} />
