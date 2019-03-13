@@ -9,15 +9,15 @@ import AppContextWrapper from './components/stores/AppProvider';
 function AppRouter() {
   console.log('index firing')
   return (
-    <AppContextWrapper>
-       <User>
+    <User>
+      <AppContextWrapper>
         <BrowserRouter>
           <div>
             <Route path="/" component={App} />
           </div>
         </BrowserRouter>
-      </User>
-    </AppContextWrapper>
+      </AppContextWrapper>
+    </User>
   );
 }
 

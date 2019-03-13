@@ -19,40 +19,40 @@ function ComingSoon() {
 export default function App(props) {
   // const [recipes, setRecipe] = useState([]);
   // const [currentRecipe, setCurrent] = useState(0);
-  const [loggedIn, setLogin] = useState(false);
+  // const [loggedIn, setLogin] = useState(false);
   // const [userRecipes, setUserRecipes] = useState([]);
   // const [userRecipeList, setUserRecipeList] = useState([]);
-  const [firstLoad, setFirstLoad] = useState(true);
+  //const [firstLoad, setFirstLoad] = useState(true);
   // const numRecipesToFetch = 5;
-  const userUrlPrefix = "http://localhost:5003/";
+  //const userUrlPrefix = "http://localhost:5003/";
   // const recipeUrlPrefix = "http://localhost:5000/"
 
 
-  useEffect(() => {
-    // fetch starting recipes
-    if (firstLoad){
-    // fetchRandomRecipes(numRecipesToFetch);
-    if (localStorage.getItem('Authorization') !== null) {
-      // test if login token still ok and renew
-      checkLoggedIn();
-    }
-    //fetchRecipeLists();
-    }
+  // useEffect(() => {
+  //   // fetch starting recipes
+  //   if (firstLoad){
+  //   // fetchRandomRecipes(numRecipesToFetch);
+  //   if (localStorage.getItem('Authorization') !== null) {
+  //     // test if login token still ok and renew
+  //     checkLoggedIn();
+  //   }
+  //   //fetchRecipeLists();
+  //   }
+  //
+  //   setFirstLoad(false);
+  // })
 
-    setFirstLoad(false);
-  })
-
-  const checkLoggedIn = async () => {
-    console.log('checking for login')
-    const url = userUrlPrefix + 'users/check-login';
-    console.log(url);
-    const response = await protectedFetch(url, 'GET');
-    if (response.loggedIn === true) {
-      console.log("user is logged in");
-      setLogin(true);
-      localStorage.setItem('Authorization', response.token);
-    }
-  }
+  // const checkLoggedIn = async () => {
+  //   console.log('checking for login')
+  //   const url = userUrlPrefix + 'users/check-login';
+  //   console.log(url);
+  //   const response = await protectedFetch(url, 'GET');
+  //   if (response.loggedIn === true) {
+  //     console.log("user is logged in");
+  //     setLogin(true);
+  //     localStorage.setItem('Authorization', response.token);
+  //   }
+  // }
 
 
   // const fetchRandomRecipes = async (numRecipes) => {
@@ -95,15 +95,12 @@ export default function App(props) {
           CookingClub
         </h1>
         <MainWindow
-          loggedIn={loggedIn}
+
         />
-        <Route path="/my-recipes/"
-          render={(props) => <RecipeList
-                                loggedIn={loggedIn}
-                              />}
+      <Route path="/my-recipes/" component={RecipeList}
         />
         <Route path="/user/login/"
-          render={(props) => <Login switchLogin={() => setLogin(true)}/>} />
+          render={(props) => <Login />} />
         <Route path="/grocery-list/" component={ComingSoon} />
         <Route path="/user/friends/" component={ComingSoon} />
         <Route path="/search/filters/" component={ComingSoon} />

@@ -6,7 +6,9 @@
 - take out hard coded url in app
 - Log off
 - Change terneary operators to (condition && jsx) format
+- load recipes from saved id list
 
 - deal with errors from fetch requests
 - make main app check if logged in
 - html for invalid username/password
+- add Bearer to JWT

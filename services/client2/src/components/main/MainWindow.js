@@ -6,7 +6,7 @@ import { UserContext } from '../stores/UserStore';
 
 export default function MainWindow(props) {
   const { changeRecipe, targetRecipe, currentRecipe } = useContext(AppContext);
-  const { setUserRecipes, userRecipes, addRecipe } = useContext(UserContext);
+  const { setUserRecipes, userRecipes, addRecipe, loggedIn } = useContext(UserContext);
 
   return (
     <section className="box">
@@ -25,7 +25,7 @@ export default function MainWindow(props) {
           <button onClick={() => changeRecipe(currentRecipe + 1)}>Next Recipe</button>
         </div>
       </div>
-      <Nav loggedIn={props.loggedIn} />
+      <Nav loggedIn={loggedIn} />
     </section>
   );
 }

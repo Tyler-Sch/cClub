@@ -11,7 +11,10 @@ export default function RecipeList(props) {
     userRecipes,
     fetchRecipeLists,
     userRecipeList,
-    userUrlPrefix } = useContext(UserContext);
+    userUrlPrefix,
+    loggedIn } = useContext(UserContext);
+
+  
 
   const createRecipeList = async (e) => {
     // need to fix hardcoded url
@@ -51,7 +54,7 @@ export default function RecipeList(props) {
                       placeholder=" new list name"
                       onChange={(e) => setNewListName(e.target.value)}
                       value={newListName}
-                      />
+                    />
                   </div>
                 </form>
               </li>
@@ -61,16 +64,15 @@ export default function RecipeList(props) {
               {
                 (userRecipeList.length > 0) && userRecipeList.map((i, idx) => (
                   <li key={idx}>{i.listName}</li>
-                ))}
-
+                ))
+              }
 
             </ul>
-
           </div>
         </div>
       </Dropdown>
       <h1 className="has-text-centered">
-        {!props.loggedIn &&
+        {!loggedIn &&
         <span className="tag is-warning ">please log in to save recipes</span>
         }
         <h1 className="title">Recipes</h1>
@@ -80,7 +82,7 @@ export default function RecipeList(props) {
       </ul>
 
       {
-        userRecipeList.length > 0 && props.loggedIn &&
+        userRecipes.length > 0 && loggedIn &&
         <button className="button is-dark is-small is-hover">Save recipe list</button>
       }
     </h1>

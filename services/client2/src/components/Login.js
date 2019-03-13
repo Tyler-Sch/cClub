@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Redirect } from 'react-router-dom';
+import { UserContext } from './stores/UserStore';
+
 
 function Login(props) {
   const [username, setUsername] = useState("");
@@ -7,6 +9,8 @@ function Login(props) {
   const [email, setEmail] = useState("");
   const [inCreateNew, setCreateNew] = useState(false);
   const [redirect, setRedirect] = useState(false);
+
+  const { setLogin } = useContext(UserContext);
 
   const sub = async (e) => {
     e.preventDefault();
@@ -35,7 +39,8 @@ function Login(props) {
       const token = data.token;
       localStorage.setItem('Authorization', token);
       setRedirect(true);
-      props.switchLogin();
+      setLogin(true);
+      // props.switchLogin();
     }
     // handle error
     else {
