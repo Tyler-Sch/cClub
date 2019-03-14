@@ -35,12 +35,32 @@ def test_create_recipe_list_with_recipes(client,session):
     user_json = add_user_via_endpoint(*create_data)
     token = user_json.get('token')
     user_id = User.query.first().id
+    recipeList = [
+        {
+            'name': 'recipe1',
+            'url': 'http://blah.com/thisandthat',
+            'pic_url': 'http://fakeurl.com/recipe234',
+            'id': 123
+        },
+        {
+            'name': 'recipe1',
+            'url': 'http://blah.com/thisandthat',
+            'pic_url': 'http://fakeurl.com/recipe234',
+            'id': 134
+        },
+        {
+            'name': 'recipe1',
+            'url': 'http://blah.com/thisandthat',
+            'pic_url': 'http://fakeurl.com/recipe234',
+            'id': 145
+        },
+    ]
 
     response = client.post(
                     url_for('users.create_recipe_list'),
                     data=json.dumps({
                         'recipeListName': 'test list',
-                        'recipes': [123, 134, 145]
+                        'recipes': recipeList
                     }),
                     content_type='application/json',
                     headers={'Authorization': token}
@@ -65,11 +85,32 @@ def test_create_recipe_endpoint_no_token(client, session):
     token = user_json.get('token')
     user_id = User.query.first().id
 
+    recipeList = [
+        {
+            'name': 'recipe1',
+            'url': 'http://blah.com/thisandthat',
+            'pic_url': 'http://fakeurl.com/recipe234',
+            'id': 123
+        },
+        {
+            'name': 'recipe1',
+            'url': 'http://blah.com/thisandthat',
+            'pic_url': 'http://fakeurl.com/recipe234',
+            'id': 134
+        },
+        {
+            'name': 'recipe1',
+            'url': 'http://blah.com/thisandthat',
+            'pic_url': 'http://fakeurl.com/recipe234',
+            'id': 145
+        },
+    ]
+
     response = client.post(
                     url_for('users.create_recipe_list'),
                     data=json.dumps({
                         'recipeListName': 'test list',
-                        'recipes': [123, 134, 145]
+                        'recipes': recipeList
                     }),
                     content_type='application/json',
                     headers={}

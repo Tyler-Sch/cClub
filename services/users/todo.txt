@@ -2,3 +2,4 @@
     not created a user
 
 - black list for tokens just logged out
+- add tests for recipe names, url, and pic_url

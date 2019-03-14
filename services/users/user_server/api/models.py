@@ -97,6 +97,9 @@ class Recipes(db.Model):
     recipe_list_id = db.Column(
                             db.Integer, db.ForeignKey('recipelist.id'),
                             primary_key=True, nullable=False)
+    recipe_name = db.Column(db.Text, nullable=False)
+    recipe_url = db.Column(db.Text)
+    pic_url = db.Column(db.Text)
     recipe_id = db.Column(db.Integer, primary_key=True, nullable=False)
     date_added = db.Column(db.DateTime, default=func.now(), nullable=False)
     added_by = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
@@ -104,10 +107,28 @@ class Recipes(db.Model):
     date_first_cooked = db.Column(db.DateTime, nullable=True)
 
 
-    def __init__(self, recipe_list_id, recipe_id, added_by):
+    def __init__(
+                self, recipe_name, recipe_url, pic_url,
+                recipe_list_id, recipe_id, added_by):
+
+        self.recipe_name = recipe_name
+        self.recipe_url = recipe_url
+        self.pic_url = pic_url
         self.recipe_list_id = recipe_list_id
         self.recipe_id = recipe_id
         self.added_by = added_by
+
+    def get_dict(self):
+        data = {
+            'name': self.recipe_name,
+            'url': self.recipe_url,
+            'pic_url': self.pic_url,
+            'id': self.recipe_id,
+            'added_by': self.added_by
+        }
+        return data
+
+
 """
 tables to add:
     Friends:

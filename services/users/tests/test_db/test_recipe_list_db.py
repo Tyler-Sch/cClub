@@ -29,7 +29,9 @@ def test_create_recipe_list(session):
 
 
 def add_recipe_to_recipe_list(session, list_id, recipe_id, user_id):
-    recipe = Recipes(list_id, recipe_id, user_id)
+    recipe = Recipes(
+                'test name', 'http://testurl','http://testpicurl.com',
+                list_id, recipe_id, user_id)
     session.add(recipe)
     session.commit()
     return recipe

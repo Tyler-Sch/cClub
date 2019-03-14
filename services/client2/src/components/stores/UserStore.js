@@ -18,17 +18,12 @@ export default function User(props) {
 
   const checkLogin = async () => {
 
-    console.log('firing checkLogin');
-    console.log(`logged in is currenctly ${loggedIn}`)
     const token = localStorage.getItem('Authorization');
     if (token) {
       // check validity
-      console.log("token is not null")
       const url = userUrlPrefix + 'users/check-login';
       const response = await protectedFetch(url, 'GET');
-      console.log(response);
       if (response.loggedIn == true) {
-        console.log('setting login to true');
         setLogin(true);
       }
       else {
@@ -39,15 +34,14 @@ export default function User(props) {
   }
 
   useEffect(() => {
+    // fetch recipe lists if loggedIn changes to true
     if (loggedIn === true) {
-      console.log('fetching recipes');
-      console.log(`loggedIn is ${loggedIn}`)
       fetchRecipeLists();
     }
   }, [loggedIn])
 
   const fetchRecipeLists = async () => {
-    console.log('fetching recipes');
+    // async function that fetches user's recipe lists
     const url = userUrlPrefix + 'users/get-recipeLists';
     const response = await protectedFetch(url,'GET')
     if (response.recipeList != undefined){
@@ -55,13 +49,13 @@ export default function User(props) {
     }
   }
 
-  // const App = useContext(AppContext);
   const addRecipe = (recipeToAdd) => {
     if (!userRecipes.includes(recipeToAdd)) {
       setUserRecipes([...userRecipes, recipeToAdd]);
-      console.log(userRecipes);
     }
   }
+
+  
 
   return (
     <UserContext.Provider value={{

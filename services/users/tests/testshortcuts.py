@@ -1,6 +1,6 @@
 from flask import url_for
 import json
-from user_server.api.models import User
+from user_server.api.models import User, RecipeList
 
 
 def add_user_via_endpoint(session, user, email, pw, client):
@@ -36,3 +36,9 @@ def login_user_via_endpoint(client, username, password):
     )
     assert response.status_code == 200
     return response.get_json()
+
+def add_recipe_list(session, userid, listname):
+    r = RecipeList(list_creator=userid, list_name=listname)
+    session.add(r)
+    session.commit()
+    return r

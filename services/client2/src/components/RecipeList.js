@@ -7,29 +7,47 @@ import { UserContext } from './stores/UserStore';
 export default function RecipeList(props) {
 
   const [newListName, setNewListName] = useState('');
+  const [targetList, setTargetList] = useState(null);
+
   const {
     userRecipes,
+    setUserRecipes,
     fetchRecipeLists,
     userRecipeList,
     userUrlPrefix,
     loggedIn } = useContext(UserContext);
 
-  
+
+  useEffect(() => {
+    if (targetList !== null) {
+      setUserRecipes(userRecipeList[targetList].recipes)
+    }
+  }, [targetList])
 
   const createRecipeList = async (e) => {
     // need to fix hardcoded url
     e.preventDefault();
+    const recipeData = userRecipes;
+    console.log(recipeData);
     const data = {
       recipeListName: newListName,
-      recipes: []
+      recipes: recipeData
     }
+
     const url = userUrlPrefix + 'users/create-new-recipe-list';
     console.log(data);
     const responseData = await protectedFetch(url, 'POST', data);
     console.log(responseData);
     setNewListName('');
     fetchRecipeLists();
+
   }
+
+  const saveRecipeList = async () => {
+    console.log(userRecipeList[targetList]);
+  }
+
+
 
   const currentRecipeList = userRecipes.map((i) => (
     <li key={i.id}><a href={i.url} target="_blank">{i.name}</a></li>
@@ -51,7 +69,7 @@ export default function RecipeList(props) {
                     <input
                       size="7"
                       type="text"
-                      placeholder=" new list name"
+                      placeholder="new list name"
                       onChange={(e) => setNewListName(e.target.value)}
                       value={newListName}
                     />
@@ -63,7 +81,7 @@ export default function RecipeList(props) {
             <ul className="menu-list">
               {
                 (userRecipeList.length > 0) && userRecipeList.map((i, idx) => (
-                  <li key={idx}>{i.listName}</li>
+                  <li key={idx} onClick={() => setTargetList(idx)}>{i.listName}</li>
                 ))
               }
 
@@ -75,7 +93,11 @@ export default function RecipeList(props) {
         {!loggedIn &&
         <span className="tag is-warning ">please log in to save recipes</span>
         }
-        <h1 className="title">Recipes</h1>
+        <h1 className="title">{
+            (targetList !== null)
+            ? userRecipeList[targetList].listName
+            : 'Recipes'}
+        </h1>
 
       <ul>
         {currentRecipeList}
@@ -83,7 +105,7 @@ export default function RecipeList(props) {
 
       {
         userRecipes.length > 0 && loggedIn &&
-        <button className="button is-dark is-small is-hover">Save recipe list</button>
+        <button onClick={() => saveRecipeList()} className="button is-dark is-small is-hover">Save recipe list</button>
       }
     </h1>
     </div>

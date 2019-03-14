@@ -78,6 +78,7 @@ def login():
         return jsonify(response)
     # Get user
     u = User.query.filter_by(username=username).first()
+    # need a check to make sure user exists
     # check password
     if not u.check_password(password):
         response['message'] = 'invalid password'
@@ -101,7 +102,9 @@ def create_recipe_list():
     """
         needs json object with following information:
             - list_name (recipeListName)
-            - can contain recipes to add in a list of int form (recipes)
+            - can contain recipes to add in a list of recipes {
+                recipe_name, url, pic_url
+            }
 
         are there any other errors I need to account for here? Could add
         general catch for the entire block...
@@ -112,10 +115,13 @@ def create_recipe_list():
     new_recipe_list = RecipeList(list_creator=user.id, list_name=recipe_list_name)
     db.session.add(new_recipe_list)
     db.session.commit()
-    for recipe_id in data.get('recipes'):
+    for recipe in data.get('recipes'):
         new_recipe = Recipes(
+                            recipe_name=recipe['name'],
+                            recipe_url=recipe['url'],
+                            pic_url=recipe['pic_url'],
                             recipe_list_id=new_recipe_list.id,
-                            recipe_id=recipe_id,
+                            recipe_id=recipe['id'],
                             added_by=user.id
         )
         db.session.add(new_recipe)
@@ -142,14 +148,59 @@ def get_recipe_lists():
         l['listName'] = list_.list_name
         l['creator'] = list_.list_creator
         l['createdDate'] = list_.created_date
-        l['recipes'] = [r.recipe_id for r in list_.recipes]
+        l['recipes'] = [{
+                            'id': r.recipe_id,
+                            'name': r.recipe_name,
+                            'url': r.recipe_url,
+                            'pic_url': r.pic_url
+                            } for r in list_.recipes]
         l['users'] = [[u.id, u.username] for u in list_.users]
+        l['listId'] = [list_.id]
         recipe_lists.append(l)
     return jsonify({
         'recipeList': recipe_lists
     })
 
-@users_blueprint.route('/users/get-recipes-from-list', methods=['GET'])
+@users_blueprint.route('/users/add-recipes-to-list', methods=['POST'])
 @login_required
-def get_recipes_from_list():
+def add_recipes_to_list():
+    """
+        request data = {'targetListId': int, 'recipes': [list of recipes]}
+        ( each recipe needs following keys: {'name', 'url','pic_url','id'})
+
+        return json {
+            'status':string,
+            'message':string,
+            updatedRecipes:[list of all recipes in list]
+
+            }
+    """
+    data = request.get_json()
+    user = g.user
+    new_recipes = data.get('recipes')
+    target_list_id = data.get('targetListId')
+    for recipe in data.get('recipes'):
+        new_recipe = Recipes(
+                            recipe_name=recipe['name'],
+                            recipe_url=recipe['url'],
+                            pic_url=recipe['pic_url'],
+                            recipe_list_id=target_list_id,
+                            recipe_id=recipe['id'],
+                            added_by=user.id
+        )
+        db.session.add(new_recipe)
+    db.session.commit()
+    updatedRecipeList = RecipeList.query.filter_by(id=target_list_id).first()
+    return jsonify({
+        'status': 'success',
+        'message': f'{updatedRecipeList.list_name} updated',
+        'updatedRecipes': [r.get_dict() for r in updatedRecipeList.recipes]
+    })
+
+
+
+
+@users_blueprint.route('/users/remove-recipe', methods=['POST'])
+@login_required
+def remove_recipe_from_list():
     pass

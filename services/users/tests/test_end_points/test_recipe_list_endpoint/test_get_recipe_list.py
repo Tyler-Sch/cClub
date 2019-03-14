@@ -85,7 +85,11 @@ def test_multipe_users_can_share_recipe_list(session, client):
 def test_recipes_on_list_come_through(session, client):
     user = add_user(session)
     recipe_list = add_recipe_list(session, user, 'test list')
-    r1 = Recipes(recipe_list_id=recipe_list.id, recipe_id=123, added_by=user.id)
+    r1 = Recipes(
+                recipe_name='recipe1', recipe_url='https://recipe.com',
+                pic_url='http://thisismyfakeurl.com',
+                recipe_list_id=recipe_list.id, recipe_id=123, added_by=user.id
+                )
     session.add(r1)
     session.commit()
     token = user.generate_auth_token()
@@ -98,4 +102,4 @@ def test_recipes_on_list_come_through(session, client):
     assert response.status_code == 200
     data = response.get_json()['recipeList'][0]
     assert len(data['recipes']) == 1
-    assert 123 in data['recipes']
+    # assert 123 in data['recipes'][id]

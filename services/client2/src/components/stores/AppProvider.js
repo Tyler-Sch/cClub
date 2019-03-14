@@ -24,6 +24,10 @@ export default function AppContextWrapper(props) {
     setRecipe([...recipes,...data.recipes])
   }
 
+  const getRecipesFromIds = (listOfIds) => {
+    const x = 2;
+  }
+
   return (
     <AppContext.Provider value={{
       targetRecipe: recipes[currentRecipe],
