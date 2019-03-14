@@ -8,6 +8,7 @@ export default function RecipeList(props) {
 
   const [newListName, setNewListName] = useState('');
   const [targetList, setTargetList] = useState(null);
+  const [newRecipes, setNewRecipes] = useState([])
 
   const {
     userRecipes,
