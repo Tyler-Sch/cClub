@@ -24,7 +24,6 @@ Login:
 
 
 Recipe List:
-  - should sort recipes in order of last on
   - should sort recipe Lists in last modified
   - hover on recipe list menu
   - delete visible on hover ONLY in non-mobile
