@@ -179,16 +179,21 @@ def add_recipes_to_list():
     user = g.user
     new_recipes = data.get('recipes')
     target_list_id = data.get('targetListId')
+    current_recipe_list = RecipeList.query.filter_by(id=target_list_id).first()
+    previous_recipes = [r.recipe_id for r in current_recipe_list.recipes]
     for recipe in data.get('recipes'):
-        new_recipe = Recipes(
-                            recipe_name=recipe['name'],
-                            recipe_url=recipe['url'],
-                            pic_url=recipe['pic_url'],
-                            recipe_list_id=target_list_id,
-                            recipe_id=recipe['id'],
-                            added_by=user.id
-        )
-        db.session.add(new_recipe)
+        if recipe['id'] in previous_recipes:
+            continue
+        else:
+            new_recipe = Recipes(
+                                recipe_name=recipe['name'],
+                                recipe_url=recipe['url'],
+                                pic_url=recipe['pic_url'],
+                                recipe_list_id=target_list_id,
+                                recipe_id=recipe['id'],
+                                added_by=user.id
+            )
+            db.session.add(new_recipe)
     db.session.commit()
     updatedRecipeList = RecipeList.query.filter_by(id=target_list_id).first()
     return jsonify({

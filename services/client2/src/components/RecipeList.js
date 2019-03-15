@@ -8,7 +8,8 @@ export default function RecipeList(props) {
 
   const [newListName, setNewListName] = useState('');
   const [targetList, setTargetList] = useState(null);
-  const [newRecipes, setNewRecipes] = useState([])
+  const [lenRecipeList, setLenRecipeList] = useState(null);
+  // const [newRecipes, setNewRecipes] = useState([])
 
   const {
     userRecipes,
@@ -24,9 +25,25 @@ export default function RecipeList(props) {
 
   useEffect(() => {
     if (targetList !== null) {
+      console.log('firing useEffect changing from targetlist')
       setSavedRecipes(userRecipeList[targetList].recipes)
     }
   }, [targetList])
+
+  useEffect(() => {
+    console.log('useEffect fired');
+    console.log(`length of userRecipeList is ${userRecipeList.length}`)
+    if (lenRecipeList === null && userRecipeList.length > 0) {
+      setLenRecipeList(userRecipeList.length);
+    }
+    else if (userRecipeList.length > lenRecipeList) {
+      setTargetList(0);
+      setLenRecipeList(userRecipeList.length);
+      setSavedRecipes([]);
+    }
+
+
+  }, [userRecipeList])
 
   const createRecipeList = async (e) => {
     e.preventDefault();
@@ -36,13 +53,13 @@ export default function RecipeList(props) {
       recipeListName: newListName,
       recipes: {}
     }
-
     const url = userUrlPrefix + 'users/create-new-recipe-list';
     console.log(data);
     const responseData = await protectedFetch(url, 'POST', data);
     console.log(responseData);
     setNewListName('');
     fetchRecipeLists();
+    // setTargetList(0);
 
   }
 
@@ -81,6 +98,7 @@ export default function RecipeList(props) {
     // console.log(response);
     if (response.status === 'success') {
       setSavedRecipes(response.updatedRecipes);
+      fetchRecipeLists();
     }
     else {
       console.log("there was an error in removeSavedRecipe in RecipeList")

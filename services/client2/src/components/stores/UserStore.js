@@ -46,7 +46,7 @@ export default function User(props) {
     const url = userUrlPrefix + 'users/get-recipeLists';
     const response = await protectedFetch(url,'GET')
     if (response.recipeList != undefined){
-      setUserRecipeList(response.recipeList);
+      setUserRecipeList(response.recipeList.reverse());
     }
   }
 
@@ -69,7 +69,7 @@ export default function User(props) {
         fetchRecipeLists,
         userUrlPrefix,
         savedRecipes,
-        setSavedRecipes
+        setSavedRecipes,
       }} >
       {props.children}
     </UserContext.Provider>
