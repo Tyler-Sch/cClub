@@ -1,14 +1,38 @@
-- refactor Login.js
-  - can be split into smaller components
-  - need to take out hard coded urls (should use environ variables)
 
-- TESTS
-- take out hard coded url in app
-- Log off
-- Change terneary operators to (condition && jsx) format
+Overall:
+  - mobile view and break points
+  - take out hard coded url in app
+  - Log off
+  - Change terneary operators to (condition && jsx) format
+  - TESTS
+  - take out hard coded url in app
+  - Log off
+  - Change terneary operators to (condition && jsx) format
+  - deal with errors from fetch requests
+  - html for invalid username/password
+  - add Bearer to JWT
+
+Search:
+  - add search back in
+
+Login:
+  - refactor Login.js
+    - can be split into smaller components
+    - need to take out hard coded urls (should use environ variables)
+  - focus should go onto login name when first going onto page
+
+
+Recipe List:
+  - after creating new list, the focus target list should move to new empty list
+  - should sort recipes in order of last on
+  - should sort recipe Lists in last modified
+  - remove unsaved recipes
+  - remove saved recipes
+  - hover on recipe list menu
+  - delete visible on hover ONLY in non-mobile
+
+
+
+
+Done:
 - load recipes from saved id list
-
-- deal with errors from fetch requests
-- make main app check if logged in
-- html for invalid username/password
-- add Bearer to JWT

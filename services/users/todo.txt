@@ -3,3 +3,5 @@
 
 - black list for tokens just logged out
 - add tests for recipe names, url, and pic_url
+
+- setup on delete for database

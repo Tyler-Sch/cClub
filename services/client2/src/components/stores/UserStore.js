@@ -51,7 +51,7 @@ export default function User(props) {
   }
 
   const addRecipe = (recipeToAdd) => {
-    if (!userRecipes.includes(recipeToAdd)) {
+    if (![...userRecipes, ...savedRecipes].includes(recipeToAdd)) {
       setUserRecipes([...userRecipes, recipeToAdd]);
     }
   }

@@ -29,7 +29,6 @@ export default function RecipeList(props) {
   }, [targetList])
 
   const createRecipeList = async (e) => {
-    // need to fix hardcoded url
     e.preventDefault();
     const recipeData = userRecipes;
     console.log(recipeData);
@@ -70,15 +69,50 @@ export default function RecipeList(props) {
     }
   }
 
+  const removeSavedRecipe = async (id) => {
+    // console.log(id);
+    // console.log("attempting to remove saved recipe from list");
+    const url = userUrlPrefix + 'users/remove-recipe';
+    const data = {
+      'targetList': userRecipeList[targetList].listId[0],
+      'targetRecipe': id
+    }
+    const response = await protectedFetch(url, 'POST', data);
+    // console.log(response);
+    if (response.status === 'success') {
+      setSavedRecipes(response.updatedRecipes);
+    }
+    else {
+      console.log("there was an error in removeSavedRecipe in RecipeList")
+    }
+  }
+
+  const removeElement = (id) => {
+    // console.log(id);
+    // console.log(`removing element at index ${id}`);
+    setUserRecipes(userRecipes.filter((i) => i.id !== id));
+  }
+
 
 
   const currentRecipeList = userRecipes.map((i) => (
-    <li key={i.id}><a className="has-text-grey" href={i.url} target="_blank">{i.name}</a></li>
+    <li className="" key={i.id}>
+      <div className="">
+        <a className="has-text-grey" href={i.url} target="_blank">{i.name}</a>
+        <button onClick={() => removeElement(i.id)}className="delete is-pulled-right"></button>
+      </div>
+    </li>
     )
   );
 
   const savedRecipeList = savedRecipes.map((i) => (
-    <li key={i.id}><a className="has-text-dark" href={i.url} target="_blank">{i.name}</a></li>
+    <li key={i.id}>
+      <div>
+        <a className="has-text-dark" href={i.url} target="_blank">{i.name}</a>
+        <button onClick={() => removeSavedRecipe(i.id)}
+          className="delete is-pulled-right"></button>
+      </div>
+    </li>
     )
   );
 

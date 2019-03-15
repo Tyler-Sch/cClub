@@ -194,7 +194,7 @@ def add_recipes_to_list():
     return jsonify({
         'status': 'success',
         'message': f'{updatedRecipeList.list_name} updated',
-        'updatedRecipes': [r.get_dict() for r in updatedRecipeList.recipes][::-1]
+        'updatedRecipes': [r.get_dict() for r in updatedRecipeList.recipes]
     })
 
 
@@ -203,4 +203,39 @@ def add_recipes_to_list():
 @users_blueprint.route('/users/remove-recipe', methods=['POST'])
 @login_required
 def remove_recipe_from_list():
-    pass
+    # maybe this should be wrapped in try/except block to catch errors
+    # that I am too inexperienced to comprehend. Maybe all of my code should
+    # do that????
+
+    # what happens when target is not found???
+    """
+        Input:
+            post request with dictionary:
+                {
+                    'targetList': id,
+                    'targetRecipe': id
+                }
+        Output:
+            json response:
+                {
+                    'status': ['success', 'fail'],
+                    'message': 'message about what happened'
+                    updatedRecipes: [list of all recipes in target list]
+                }
+    """
+    user = g.user
+    data = request.get_json()
+    target = (data['targetList'], data['targetRecipe'])
+    recipe = Recipes.query.get(target)
+    recipe_name = recipe.recipe_name
+
+    db.session.delete(recipe)
+    db.session.commit()
+
+    updatedRecipeList = RecipeList.query.filter_by(id=target[0]).first()
+    response = {
+        'status': 'success',
+        'message': f'deleted {recipe_name} from target list',
+        'updatedRecipes': [r.get_dict() for r in updatedRecipeList.recipes]
+    }
+    return jsonify(response)

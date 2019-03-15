@@ -84,10 +84,10 @@ def test_add_multiple_recipes_to_recipe_list(client,session):
     assert data['status'] == 'success'
     assert data['message'] == f'{recipe_list.list_name} updated'
     assert len(data['updatedRecipes']) == 3
-    assert data['updatedRecipes'][0]['name'] == Recipes.query.first().recipe_name
+    assert 'potato' in data['updatedRecipes'][0]['name']
 
 
-def test_get_recipe_list_back_when_given_empty_list(client, session):
+def add_user_recipe_list_and_recipes(session):
     u = add_user(session)
     token = u.generate_auth_token().decode('utf-8')
     recipe_list = add_recipe_list(session, u.id, 'test list')
@@ -114,6 +114,12 @@ def test_get_recipe_list_back_when_given_empty_list(client, session):
     assert Recipes.query.count() == 2
     assert len(RecipeList.query.first().recipes) == 2
 
+    return (u, token, recipe_list)
+
+
+def test_get_recipe_list_back_when_given_empty_list(client, session):
+    u, token, recipe_list = add_user_recipe_list_and_recipes(session)
+
     response = client.post(
         url_for('users.add_recipes_to_list'),
         data=json.dumps({
@@ -132,5 +138,37 @@ def test_get_recipe_list_back_when_given_empty_list(client, session):
     assert 'name' in recipes[1]
     assert 'url' in recipes[0]
     assert 'url' in recipes[1]
-    assert recipes[0]['name'] == 'potato'
+    assert 'potato' in recipes[0]['name']
     assert recipes[0]['id'] == 123 or recipes[1]['id'] == 123
+
+
+
+def test_delete_recipe_from_list_via_endpoint(session, client):
+    u, token, recipe_list = add_user_recipe_list_and_recipes(session)
+    recipe_id = 123  # this is recipe id that previous line added
+    request_data = {
+        'targetList': recipe_list.id,
+        'targetRecipe': recipe_id
+    }
+    response = client.post(
+        url_for('users.remove_recipe_from_list'),
+        data=json.dumps(request_data),
+        content_type='application/json',
+        headers={'Authorization': token}
+    )
+
+    assert response.status_code == 200
+    data = response.get_json()
+
+    # check response is accurate
+    assert 'success' in data['status']
+    assert 'deleted potato from target list' in data['message']
+    assert 1 == len(data['updatedRecipes'])
+    assert data['updatedRecipes'][0]['id'] == 12 # 12 is id that should be there
+
+    # check database
+
+    assert Recipes.query.filter_by(recipe_list_id=recipe_list.id).count() == 1
+
+def test_invalid_input_with_remove():
+    pass
