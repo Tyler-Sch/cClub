@@ -17,8 +17,8 @@ export default function User(props) {
   }, [])
 
 
+  // check if previous login token exists and if it's valid
   const checkLogin = async () => {
-
     const token = localStorage.getItem('Authorization');
     if (token) {
       // check validity
@@ -34,15 +34,16 @@ export default function User(props) {
     else {setLogin(false);}
   }
 
+
+  // fetch recipe lists if loggedIn changes to true
   useEffect(() => {
-    // fetch recipe lists if loggedIn changes to true
     if (loggedIn === true) {
       fetchRecipeLists();
     }
   }, [loggedIn])
 
+  // async function that fetches user's recipe lists
   const fetchRecipeLists = async () => {
-    // async function that fetches user's recipe lists
     const url = userUrlPrefix + 'users/get-recipeLists';
     const response = await protectedFetch(url,'GET')
     if (response.recipeList != undefined){
@@ -50,13 +51,12 @@ export default function User(props) {
     }
   }
 
+  // add recipes to unsaved list
   const addRecipe = (recipeToAdd) => {
     if (![...userRecipes, ...savedRecipes].includes(recipeToAdd)) {
       setUserRecipes([...userRecipes, recipeToAdd]);
     }
   }
-
-
 
   return (
     <UserContext.Provider value={{

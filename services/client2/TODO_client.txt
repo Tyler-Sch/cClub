@@ -24,25 +24,31 @@ Login:
 
 
 Recipe List:
-  - after creating new list, the focus target list should move to new empty list
   - should sort recipes in order of last on
   - should sort recipe Lists in last modified
-  # remove unsaved recipes
-  # remove saved recipes
   - hover on recipe list menu
   - delete visible on hover ONLY in non-mobile
   - need save recipe button to work when attempting to save list that
     hasn't been created
-  # duplicate recipes can be added by switching to other recipe lists (solved
     server side)
   - would be nice if recipe lists would change order if they had been worked
     on more recently. (might take care of itself if we store when last modded
     and sort by that date on the backend)
   - need to be able to delete recipeLists
+  - BUG: when going back to recipe list from any other pages,
+    the recipe list that was in scope changes back to the null ("Recipes") value
+    but the previous saved recipes remains, this also prevents delete operations
+    on that list
+      - could move targetRecipe varaible up to users so it is persistent
+      - could take care of it within RecipeList, but maybe complicated
+  # load recipes from saved id list
+  # duplicate recipes can be added by switching to other recipe lists (solved
+  # delete unsaved recipes
+  # delete saved recipes
+  # after creating new list, the focus target list should move to new empty list
 
 
 
 Done:
-- load recipes from saved id list
 
 D

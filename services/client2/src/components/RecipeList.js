@@ -9,7 +9,6 @@ export default function RecipeList(props) {
   const [newListName, setNewListName] = useState('');
   const [targetList, setTargetList] = useState(null);
   const [lenRecipeList, setLenRecipeList] = useState(null);
-  // const [newRecipes, setNewRecipes] = useState([])
 
   const {
     userRecipes,
@@ -22,7 +21,7 @@ export default function RecipeList(props) {
     savedRecipes,
     setSavedRecipes } = useContext(UserContext);
 
-
+  // when target list changes, render that new list
   useEffect(() => {
     if (targetList !== null) {
       console.log('firing useEffect changing from targetlist')
@@ -30,10 +29,9 @@ export default function RecipeList(props) {
     }
   }, [targetList])
 
+  // when new list is created, put new list in target in focus
   useEffect(() => {
-    console.log('useEffect fired');
-    console.log(`length of userRecipeList is ${userRecipeList.length}`)
-    if (lenRecipeList === null && userRecipeList.length > 0) {
+    if (lenRecipeList === null && userRecipeList.length >= 0) {
       setLenRecipeList(userRecipeList.length);
     }
     else if (userRecipeList.length > lenRecipeList) {
@@ -41,39 +39,30 @@ export default function RecipeList(props) {
       setLenRecipeList(userRecipeList.length);
       setSavedRecipes([]);
     }
-
-
   }, [userRecipeList])
 
+  // add a new recipe list
   const createRecipeList = async (e) => {
     e.preventDefault();
     const recipeData = userRecipes;
-    console.log(recipeData);
     const data = {
       recipeListName: newListName,
       recipes: {}
     }
     const url = userUrlPrefix + 'users/create-new-recipe-list';
-    console.log(data);
     const responseData = await protectedFetch(url, 'POST', data);
-    console.log(responseData);
     setNewListName('');
     fetchRecipeLists();
-    // setTargetList(0);
-
   }
 
+  // save unsaved recipes to database
   const saveRecipeList = async () => {
-    console.log(userRecipeList[targetList]);
-    console.log('saving recipe list');
     const data = {
         'targetListId': userRecipeList[targetList].listId[0],
         'recipes': userRecipes
     }
-    console.log(data);
     const url = userUrlPrefix + 'users/add-recipes-to-list';
     const response = await protectedFetch(url, 'POST', data);
-    console.log(response);
     if (response.status === 'success') {
         setSavedRecipes([...userRecipes, ...savedRecipes]);
         setUserRecipes([]);
@@ -86,16 +75,14 @@ export default function RecipeList(props) {
     }
   }
 
+  // delete saved recipe from database
   const removeSavedRecipe = async (id) => {
-    // console.log(id);
-    // console.log("attempting to remove saved recipe from list");
     const url = userUrlPrefix + 'users/remove-recipe';
     const data = {
       'targetList': userRecipeList[targetList].listId[0],
       'targetRecipe': id
     }
     const response = await protectedFetch(url, 'POST', data);
-    // console.log(response);
     if (response.status === 'success') {
       setSavedRecipes(response.updatedRecipes);
       fetchRecipeLists();
@@ -105,9 +92,8 @@ export default function RecipeList(props) {
     }
   }
 
+  // remove unsaved item from recipe list
   const removeElement = (id) => {
-    // console.log(id);
-    // console.log(`removing element at index ${id}`);
     setUserRecipes(userRecipes.filter((i) => i.id !== id));
   }
 
