@@ -7,6 +7,7 @@ export const UserContext = new createContext();
 export default function User(props) {
   const [userRecipes, setUserRecipes] = useState([]);
   const [userRecipeList, setUserRecipeList] = useState([]);
+  const [savedRecipes, setSavedRecipes] = useState([]);
   const [loggedIn, setLogin] = useState(null);
   const userUrlPrefix = "http://localhost:5003/";
 
@@ -55,7 +56,7 @@ export default function User(props) {
     }
   }
 
-  
+
 
   return (
     <UserContext.Provider value={{
@@ -66,7 +67,9 @@ export default function User(props) {
         setUserRecipes,
         addRecipe,
         fetchRecipeLists,
-        userUrlPrefix
+        userUrlPrefix,
+        savedRecipes,
+        setSavedRecipes
       }} >
       {props.children}
     </UserContext.Provider>

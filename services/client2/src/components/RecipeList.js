@@ -15,13 +15,16 @@ export default function RecipeList(props) {
     setUserRecipes,
     fetchRecipeLists,
     userRecipeList,
+    setUserRecipeList,
     userUrlPrefix,
-    loggedIn } = useContext(UserContext);
+    loggedIn,
+    savedRecipes,
+    setSavedRecipes } = useContext(UserContext);
 
 
   useEffect(() => {
     if (targetList !== null) {
-      setUserRecipes(userRecipeList[targetList].recipes)
+      setSavedRecipes(userRecipeList[targetList].recipes)
     }
   }, [targetList])
 
@@ -32,7 +35,7 @@ export default function RecipeList(props) {
     console.log(recipeData);
     const data = {
       recipeListName: newListName,
-      recipes: recipeData
+      recipes: {}
     }
 
     const url = userUrlPrefix + 'users/create-new-recipe-list';
@@ -46,12 +49,36 @@ export default function RecipeList(props) {
 
   const saveRecipeList = async () => {
     console.log(userRecipeList[targetList]);
+    console.log('saving recipe list');
+    const data = {
+        'targetListId': userRecipeList[targetList].listId[0],
+        'recipes': userRecipes
+    }
+    console.log(data);
+    const url = userUrlPrefix + 'users/add-recipes-to-list';
+    const response = await protectedFetch(url, 'POST', data);
+    console.log(response);
+    if (response.status === 'success') {
+        setSavedRecipes([...userRecipes, ...savedRecipes]);
+        setUserRecipes([]);
+        // fetching all the recipe lists is ineffcient, but hey,
+        // we dont want to do premature optimization, right???
+        fetchRecipeLists();
+    }
+    else {
+        console.log('error in saveRecipeList in RecipeList');
+    }
   }
 
 
 
   const currentRecipeList = userRecipes.map((i) => (
-    <li key={i.id}><a href={i.url} target="_blank">{i.name}</a></li>
+    <li key={i.id}><a className="has-text-grey" href={i.url} target="_blank">{i.name}</a></li>
+    )
+  );
+
+  const savedRecipeList = savedRecipes.map((i) => (
+    <li key={i.id}><a className="has-text-dark" href={i.url} target="_blank">{i.name}</a></li>
     )
   );
 
@@ -102,6 +129,7 @@ export default function RecipeList(props) {
 
       <ul>
         {currentRecipeList}
+        {savedRecipeList}
       </ul>
 
       {

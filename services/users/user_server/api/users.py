@@ -194,7 +194,7 @@ def add_recipes_to_list():
     return jsonify({
         'status': 'success',
         'message': f'{updatedRecipeList.list_name} updated',
-        'updatedRecipes': [r.get_dict() for r in updatedRecipeList.recipes]
+        'updatedRecipes': [r.get_dict() for r in updatedRecipeList.recipes][::-1]
     })
 
 
