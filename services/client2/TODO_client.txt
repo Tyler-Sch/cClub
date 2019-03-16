@@ -12,6 +12,7 @@ Overall:
   - html for invalid username/password
   - add Bearer to JWT
   - Need catch for requests with invalid token
+  - make overall height larger website jumps less
 
 Search:
   - add search back in
@@ -24,12 +25,12 @@ Login:
 
 
 Recipe List:
-  - should sort recipe Lists in last modified
   - hover on recipe list menu
   - delete visible on hover ONLY in non-mobile
   - need save recipe button to work when attempting to save list that
     hasn't been created
     server side)
+  - should sort recipe Lists in last modified
   - would be nice if recipe lists would change order if they had been worked
     on more recently. (might take care of itself if we store when last modded
     and sort by that date on the backend)

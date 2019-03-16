@@ -40,6 +40,12 @@ export default function User(props) {
     if (loggedIn === true) {
       fetchRecipeLists();
     }
+    else {
+      setUserRecipes([]);
+      setUserRecipeList([]);
+      setSavedRecipes([]);
+
+    }
   }, [loggedIn])
 
   // async function that fetches user's recipe lists
