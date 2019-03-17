@@ -25,7 +25,6 @@ Login:
 
 
 Recipe List:
-  - hover on recipe list menu
   - delete visible on hover ONLY in non-mobile
   - need save recipe button to work when attempting to save list that
     hasn't been created
@@ -46,6 +45,7 @@ Recipe List:
   # delete unsaved recipes
   # delete saved recipes
   # after creating new list, the focus target list should move to new empty list
+  # hover on recipe list menu
 
 
 
