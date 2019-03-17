@@ -15,7 +15,7 @@ export default function Nav(props) {
         <li><Link to="/search/filters/">Filters</Link></li>
         {
           (props.loggedIn)
-          ? <li><Link to="/users/logoff/">Log off</Link></li>
+          ? <li><Link to="/user/logoff/">Log off</Link></li>
           :  <li><Link to="/user/login/">Login</Link></li>
         }
       </ul>
