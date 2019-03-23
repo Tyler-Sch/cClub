@@ -47,13 +47,32 @@ async def getRecipe(request, id):
 async def get_random_recipes(request, amount):
     """
         get random n recipes. n being amount in the request
+        If there is a query string
     """
     async with app.pool.acquire() as connection:
-        recipes = await connection.fetch("""
-            SELECT id, name, source, pic_url, url FROM recipes
-            WHERE pic_url != 'missing'
-            ORDER BY RANDOM() LIMIT $1;
-        """, amount)
+        if not request.args.get('filter'):
+            recipes = await connection.fetch("""
+                SELECT id, name, source, pic_url, url FROM recipes
+                WHERE pic_url != 'missing'
+                ORDER BY RANDOM() LIMIT $1;
+            """, amount)
+
+        else:
+
+            data = request.args
+            filter_args = [int(i) for i in data['filter']]
+            query = """
+                SELECT id, name, source, pic_url, url
+                FROM recipes r
+                WHERE r.id not in (
+                    SELECT DISTINCT i.recipe
+                    FROM ingredients i INNER JOIN ingredient_information ii
+                    ON (i.ingredient = ii.id)
+                    WHERE ii.fdgroup_num = ANY($1)
+                )
+                ORDER BY RANDOM() limit $2
+            """
+            recipes = await connection.fetch(query, filter_args, amount)
 
         return json({'recipes': [dict(i) for i in recipes]})
 
@@ -66,13 +85,15 @@ async def get_recipe_restricted(request):
         Client send request with query string:
             ?include=ingredient1&include=ingredient2
 
-            
+
     """
     # might make sense to have this use a looser search
     # maybe using matching% Otherwise it might be way
     # too constrictive
     # COULD ADD A FLAG
     async with app.pool.acquire() as connection:
+        if not request.args:
+            return json({'status': 'error', 'message': 'no query string'})
         data = request.args
         # print(data['include'])
         # mod_data = [f'%{i}%' for i in data['include']]
@@ -100,6 +121,8 @@ async def get_recipe_restricted(request):
 
     return json([dict(i) for i in results])
     # return json(include_set)
+
+
 
 if __name__ == '__main__':
     if os.environ['APP_SETTINGS'] == 'DevelopmentConfig':

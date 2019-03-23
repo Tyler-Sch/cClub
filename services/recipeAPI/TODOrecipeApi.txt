@@ -1,0 +1,6 @@
+Overall:
+    - refactor into blueprint and make with create_app
+    - refactor test to take them out of main folder
+
+server:
+    - handle request with empty query string in search
