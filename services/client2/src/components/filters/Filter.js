@@ -9,6 +9,8 @@ export default function Filter() {
     filterObj,
     resetRecipes } = useContext(AppContext);
 
+  // add fdgroup_num (database column in food_information)
+  // to filter list 
   const addToFilterList = (id) => {
     if (filters.includes(id)) {
       const targetIndex = filters.indexOf(id);
