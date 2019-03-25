@@ -47,10 +47,30 @@ async def getRecipe(request, id):
 async def get_random_recipes(request, amount):
     """
         get random n recipes. n being amount in the request
-        If there is a query string
+        If there is a query string with 'filter' in key data included:
+            app will filter OUT food elements of those types
+
+        FILTER NUM MAP {
+            100: Dairy and Eggs,
+            400: fats and oils,
+            500: poultry products,
+            700: sausage and lunch meat,
+            800: breakfast cereals
+            900: Fruits and fruit juices,
+            1000: Pork products,
+            1100: vegetables,
+            1200: Nuts and seeds,
+            1300: Beef products,
+            1400: Beverages,
+            1500: Finfish and shellfishself,
+            1600: Legumes,
+            1700: lamb, veal, and game,
+            2000: Cereal Grains and Pasta,
+        }
     """
     async with app.pool.acquire() as connection:
         if not request.args.get('filter'):
+            filter = False
             recipes = await connection.fetch("""
                 SELECT id, name, source, pic_url, url FROM recipes
                 WHERE pic_url != 'missing'
@@ -58,7 +78,8 @@ async def get_random_recipes(request, amount):
             """, amount)
 
         else:
-
+            # should test for validity of data
+            filter = True
             data = request.args
             filter_args = [int(i) for i in data['filter']]
             query = """
@@ -74,7 +95,7 @@ async def get_random_recipes(request, amount):
             """
             recipes = await connection.fetch(query, filter_args, amount)
 
-        return json({'recipes': [dict(i) for i in recipes]})
+        return json({'recipes': [dict(i) for i in recipes], 'filter': filter})
 
 
 @app.get('/recipes/filter')
@@ -95,9 +116,6 @@ async def get_recipe_restricted(request):
         if not request.args:
             return json({'status': 'error', 'message': 'no query string'})
         data = request.args
-        # print(data['include'])
-        # mod_data = [f'%{i}%' for i in data['include']]
-        # print(mod_data)
 
         include_ingredients = await connection.fetch("""
             SELECT id from ingredient_list

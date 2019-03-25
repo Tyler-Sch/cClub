@@ -1,6 +1,8 @@
 Overall:
     - refactor into blueprint and make with create_app
     - refactor test to take them out of main folder
+    - create test database with a limited amount of recipes to ensure
+      accuracy of search queries and database calls
 
 server:
     - handle request with empty query string in search

@@ -14,6 +14,7 @@ Overall:
   - Need catch for requests with invalid token
   - make overall height larger website jumps less
 
+
 Search:
   - add search back in
 
@@ -34,6 +35,8 @@ Recipe List:
     on more recently. (might take care of itself if we store when last modded
     and sort by that date on the backend)
   - need to be able to delete recipeLists
+  - BUG: front end crashes when you try to save a recipe list on a list that
+         hasn't been created
   - BUG: when going back to recipe list from any other pages,
     the recipe list that was in scope changes back to the null ("Recipes") value
     but the previous saved recipes remains, this also prevents delete operations

@@ -6,6 +6,7 @@ def test_is_this_thing_on():
 
 # It would probably good to spin up a test database
 # for running these tests
+# in current state, the database must be fully loaded
 
 def test_get_recipe():
     request, response = app.test_client.get('/recipes/325')
