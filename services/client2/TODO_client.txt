@@ -52,6 +52,9 @@ Recipe List:
 
 
 
-Done:
+Filter:
+  - make it look nicer
+  - add filter by sources
 
-D
+AppProvider:
+  - make fetch recipes and filtered fetch recipes into one function

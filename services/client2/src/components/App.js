@@ -5,6 +5,7 @@ import RecipeList from './RecipeList';
 import { Route, Redirect } from 'react-router-dom';
 // import protectedFetch from './helpers';
 import { UserContext } from './stores/UserStore';
+import Filter from './filters/Filter';
 
 
 
@@ -43,7 +44,7 @@ export default function App(props) {
         <Route path="/user/login/" component={Login} />
         <Route path="/grocery-list/" component={ComingSoon} />
         <Route path="/user/friends/" component={ComingSoon} />
-        <Route path="/search/filters/" component={ComingSoon} />
+        <Route path="/search/filters/" component={Filter} />
         <Route path="/user/logoff/" component={Logoff} />
     </div>
   )

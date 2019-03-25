@@ -78,7 +78,7 @@ export default function User(props) {
         savedRecipes,
         setSavedRecipes,
         targetList,
-        setTargetList
+        setTargetList,
       }} >
       {props.children}
     </UserContext.Provider>
