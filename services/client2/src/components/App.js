@@ -19,9 +19,10 @@ function ComingSoon() {
 
 
 function Logoff() {
-  const { setLogin } = useContext(UserContext);
+  const { setLogin, setTargetList } = useContext(UserContext);
   localStorage.removeItem('Authorization');
   setLogin(false);
+  setTargetList(null);
 
   return (
     <Redirect to="/" />

@@ -7,7 +7,7 @@ import { UserContext } from './stores/UserStore';
 export default function RecipeList(props) {
 
   const [newListName, setNewListName] = useState('');
-  const [targetList, setTargetList] = useState(null);
+  // const [targetList, setTargetList] = useState(null);
   const [lenRecipeList, setLenRecipeList] = useState(null);
 
   const {
@@ -18,7 +18,9 @@ export default function RecipeList(props) {
     userUrlPrefix,
     loggedIn,
     savedRecipes,
-    setSavedRecipes } = useContext(UserContext);
+    setSavedRecipes,
+    targetList,
+    setTargetList } = useContext(UserContext);
 
   // when target list changes, render that new list
   useEffect(() => {

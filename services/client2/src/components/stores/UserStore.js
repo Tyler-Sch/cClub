@@ -8,6 +8,7 @@ export default function User(props) {
   const [userRecipes, setUserRecipes] = useState([]);
   const [userRecipeList, setUserRecipeList] = useState([]);
   const [savedRecipes, setSavedRecipes] = useState([]);
+  const [targetList, setTargetList] = useState(null);
   const [loggedIn, setLogin] = useState(null);
   const userUrlPrefix = "http://localhost:5003/";
 
@@ -76,6 +77,8 @@ export default function User(props) {
         userUrlPrefix,
         savedRecipes,
         setSavedRecipes,
+        targetList,
+        setTargetList
       }} >
       {props.children}
     </UserContext.Provider>
