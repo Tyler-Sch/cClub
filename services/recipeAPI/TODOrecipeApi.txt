@@ -3,6 +3,8 @@ Overall:
     - refactor test to take them out of main folder
     - create test database with a limited amount of recipes to ensure
       accuracy of search queries and database calls
+    - figure out a way to test the database effectively (might need some
+      raw sql helpers)
 
 server:
     - handle request with empty query string in search
