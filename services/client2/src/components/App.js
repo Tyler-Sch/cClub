@@ -6,7 +6,7 @@ import { Route, Redirect } from 'react-router-dom';
 // import protectedFetch from './helpers';
 import { UserContext } from './stores/UserStore';
 import Filter from './filters/Filter';
-
+import GroceryList from './GroceryList';
 
 
 function ComingSoon() {
@@ -42,7 +42,7 @@ export default function App(props) {
         <MainWindow />
         <Route path="/my-recipes/" component={RecipeList} />
         <Route path="/user/login/" component={Login} />
-        <Route path="/grocery-list/" component={ComingSoon} />
+        <Route path="/grocery-list/" component={GroceryList} />
         <Route path="/user/friends/" component={ComingSoon} />
         <Route path="/search/filters/" component={Filter} />
         <Route path="/user/logoff/" component={Logoff} />
