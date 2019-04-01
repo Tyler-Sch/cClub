@@ -47,16 +47,13 @@ export default function AppContextWrapper(props) {
     );
     const data = await response.json();
     setRecipe([...recipes,...data.recipes])
-    // console.log(data);
   }
-  
+
   const fetchFilteredRecipes = async (numRecipes) => {
     const encodedQueryString = queryString.stringify({'filter':filters})
     const url = recipeUrlPrefix + `recipes/random/${numRecipes}?${encodedQueryString}`
-    // console.log(url);
     const response = await fetch(url);
     const data = await response.json();
-    // console.log(data);
     setRecipe([...recipes, ...data.recipes])
 
   }
@@ -64,6 +61,14 @@ export default function AppContextWrapper(props) {
   const resetRecipes = () => {
     const slicedRecipes = recipes.slice(0, currentRecipe + 1);
     setRecipe(slicedRecipes);
+  }
+
+  const fetchIngredients = async (listOfRecipeIds) => {
+    const encodedQueryString = queryString.stringify({'recipes':listOfRecipeIds});
+    const url = recipeUrlPrefix + `recipes/ingredients?${encodedQueryString}`;
+    const response = await fetch(url);
+    const data = await response.json();
+    return data
   }
 
   return (
@@ -74,7 +79,8 @@ export default function AppContextWrapper(props) {
       filterObj,
       filters,
       setFilters,
-      resetRecipes
+      resetRecipes,
+      fetchIngredients
 
     }} >
       { props.children }
