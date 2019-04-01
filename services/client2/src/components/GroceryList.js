@@ -25,25 +25,44 @@ export default function GroceryList() {
     console.log('fetched data for grocery list')
   }
 
-  const getDisplayItemsNames = () => {
+  const sortRecipeListIngredients = (a, b) => {
+    if (a.ingredient >  b.ingredient) {
+      return 1;
+    }
+    if (a.ingredient == b.ingredient) {
+      return 0;
+    }
+    if (a.ingredient < b.ingredient) {
+      return -1;
+    }
 
-    const display = displayItemName
-                    ? recipeListIngredients.map(i => (
-                      <li>{i.ingredient}</li>
-                    ))
-                    : recipeListIngredients.map(i => (
-                      <li>{i.original_text}</li>
-                    ))
-    console.log(displayItemName)
-
-
-    return display;
   }
-  const getDisplayItemsOriginalText = () => {
-    const ogText = recipeListIngredients.map(i => (
-      <li>{i.original_text}</li>
-    ));
-    return ogText;
+
+  const getDisplayItemsNames = () => {
+    const listItems = [...recipeListIngredients];
+    listItems.sort((a, b) => sortRecipeListIngredients(a, b))
+    if (displayItemName) {
+      const justItems = listItems.map(i => i.ingredient);
+      console.log(justItems);
+      const filteredItems = justItems.filter((v, i, a) => a.indexOf(v) === i);
+      console.log(filteredItems);
+      const display = filteredItems.map(i => <li>{i}</li>);
+      return display;
+    }
+    else {
+      const display = listItems.map(i => <li>{i.original_text}</li>)
+      return display;
+    }
+
+
+    // const display = displayItemName
+    //                 ? listItems.map(i => (
+    //                   <li>{i.ingredient}</li>
+    //                 ))
+    //                 : listItems.map(i => (
+    //                   <li>{i.original_text}</li>
+    //                 ))
+    // return display;
   }
 
   // console.log(recipeListIngredients)
