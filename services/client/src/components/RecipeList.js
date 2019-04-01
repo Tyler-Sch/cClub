@@ -29,6 +29,11 @@ export default function RecipeList(props) {
     }
   }, [targetList])
 
+  useEffect(() => {
+    console.log('useEffect in recipeLIst fired');
+    document.querySelector("#main").style.minHeight = '4000px';
+  })
+
   // when new list is created, put new list in target in focus
   useEffect(() => {
     if (lenRecipeList === null && userRecipeList.length >= 0) {

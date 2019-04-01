@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import MainWindow from './main/MainWindow';
 import Login from './Login';
 import RecipeList from './RecipeList';
@@ -31,7 +31,9 @@ function Logoff() {
 }
 
 export default function App(props) {
-
+  useEffect(() => {
+    console.log('useEffect just fired in App');
+  })
 
   return (
     <div>

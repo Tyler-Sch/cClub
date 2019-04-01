@@ -54,15 +54,6 @@ export default function GroceryList() {
       return display;
     }
 
-
-    // const display = displayItemName
-    //                 ? listItems.map(i => (
-    //                   <li>{i.ingredient}</li>
-    //                 ))
-    //                 : listItems.map(i => (
-    //                   <li>{i.original_text}</li>
-    //                 ))
-    // return display;
   }
 
   // console.log(recipeListIngredients)
