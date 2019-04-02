@@ -68,21 +68,22 @@ export default function GroceryList() {
             className="button"
             onClick={() => setShouldAddCurrentRecipes(!shouldAddCurrentRecipes)}
           >
-            Add recipes from current list
+            Add/remove recipes from recipes
           </button>
           <button className="button"
                   onClick={() => setDisplayItemName(!displayItemName)}
             >
-            switch to recipe amount view
+            switch to recipe view
           </button>
         </div>
       </div>
-
-      <ul>
-        {
-          recipeListIngredients.length >= 1 && shouldAddCurrentRecipes && getDisplayItemsNames()
-        }
-      </ul>
+      <div className="content">
+        <ul>
+          {
+            recipeListIngredients.length >= 1 && shouldAddCurrentRecipes && getDisplayItemsNames()
+          }
+        </ul>
+      </div>
     </div>
   )
 }

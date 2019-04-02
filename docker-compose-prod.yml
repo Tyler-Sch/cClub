@@ -1,0 +1,51 @@
+version: '3.7'
+
+services:
+
+  recipes:
+    build:
+      context: ./services/recipeAPI
+      dockerfile: Dockerfile-dev
+    ports:
+      - 5000:8000
+    environment:
+      - APP_SETTINGS=Production
+      - DATABASE_URI=postgres://postgres:postgres@recipes-db:5432/recipes_test
+      - DATABASE_TEST_URL=postgres://postgres@recipes-db:5432/recipes_test
+    depends_on:
+      - recipes-db
+
+  recipes-db:
+    build:
+      context: ./services/recipeAPI/server/db
+      dockerfile: Dockerfile
+    ports:
+      - "5435:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+
+  users:
+    build:
+      context: ./services/users
+      dockerfile: Dockerfile-dev
+    ports:
+      - 5003:5002
+    environment:
+      - FLASK_APP=user_server/userServer.py
+      - FLASK_ENV=production
+      - APP_SETTINGS=user_server.config.ProductionConfig
+      - DATABASE_URL=postgres://postgres:postgres@users-db:5432/users_prod
+      - DATABASE_TEST_URL=postgres://postgres:postgres@users-db:5432/users_test
+    depends_on:
+      - users-db
+
+  users-db:
+    build:
+      context: ./services/users/user_server/db
+      dockerfile: Dockerfile
+    ports:
+      - "5436:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
