@@ -6,8 +6,8 @@ services:
     build:
       context: ./services/recipeAPI
       dockerfile: Dockerfile-dev
-    ports:
-      - 5000:8000
+    expose:
+        - '8000'
     environment:
       - APP_SETTINGS=Production
       - DATABASE_URI=postgres://postgres:postgres@recipes-db:5432/recipes_test
@@ -19,8 +19,8 @@ services:
     build:
       context: ./services/recipeAPI/server/db
       dockerfile: Dockerfile
-    ports:
-      - "5435:5432"
+    expose:
+        - '5432'
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
@@ -49,3 +49,13 @@ services:
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
+
+  nginx:
+    build:
+      context: ./services/nginx
+      dockerfile: Dockerfile-prod
+    restart: always
+    ports:
+      - 80:80
+    depends_on:
+      - recipes
