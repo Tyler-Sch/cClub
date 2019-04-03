@@ -71,8 +71,8 @@ services:
         - NODE_ENV=production
         - REACT_APP_USERS_SERVICE_URL=${REACT_APP_USERS_SERVICE_URL}
         - REACT_APP_RECIPES_SERVICE_URL=${REACT_APP_RECIPES_SERVICE_URL}
-      ports:
-        - '3007:80'
-      depends_on:
-        - users
-        - recipes
+    ports:
+      - '3007:80'
+    depends_on:
+      - users
+      - recipes
