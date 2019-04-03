@@ -54,8 +54,9 @@ services:
     build:
       context: ./services/nginx
       dockerfile: Dockerfile-prod
-    restart: always
+    restart: unless-stopped
     ports:
       - 80:80
     depends_on:
       - recipes
+      - users
