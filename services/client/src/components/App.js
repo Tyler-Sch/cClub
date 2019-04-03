@@ -1,12 +1,12 @@
 import React, { useContext, useEffect } from 'react';
 import MainWindow from './main/MainWindow';
-import Login from './Login';
-import RecipeList from './RecipeList';
+import Login from './loginPage/Login';
+import RecipeList from './recipePage/RecipeList';
 import { Route, Redirect } from 'react-router-dom';
 // import protectedFetch from './helpers';
 import { UserContext } from './stores/UserStore';
 import Filter from './filters/Filter';
-import GroceryList from './GroceryList';
+import GroceryList from './GroceryPage/GroceryList';
 
 
 function ComingSoon() {

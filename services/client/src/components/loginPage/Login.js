@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { Redirect } from 'react-router-dom';
-import { UserContext } from './stores/UserStore';
+import { UserContext } from '../stores/UserStore';
 
 
 function Login(props) {

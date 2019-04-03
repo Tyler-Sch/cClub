@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react';
-import protectedFetch from './helpers';
-import Dropdown from './standardComps/Dropdown';
-import { UserContext } from './stores/UserStore';
+import protectedFetch from '../helpers';
+import Dropdown from '../standardComps/Dropdown';
+import { UserContext } from '../stores/UserStore';
 
 
 export default function RecipeList(props) {

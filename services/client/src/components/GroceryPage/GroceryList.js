@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { UserContext } from './stores/UserStore';
-import { AppContext } from './stores/AppProvider';
-import protectedFetch from './helpers';
+import { UserContext } from '../stores/UserStore';
+import { AppContext } from '../stores/AppProvider';
+import protectedFetch from '../helpers';
 
 export default function GroceryList() {
   const [recipeListIngredients, setRecipeListIngredients] = useState([]);
