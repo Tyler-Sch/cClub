@@ -1,9 +1,7 @@
 from sanic import Sanic
-from sanic.response import json, html
+from sanic.response import json
 import os
-import asyncio
-import uvloop
-from asyncpg import connect, create_pool
+from asyncpg import create_pool
 from sanic_cors import CORS
 
 
@@ -42,6 +40,7 @@ async def getRecipe(request, id):
         """, id)
         results['steps'] = [i['step'] for i in steps]
     return json(results)
+
 
 @app.route('/recipes/random/<amount:int>')
 async def get_random_recipes(request, amount):
