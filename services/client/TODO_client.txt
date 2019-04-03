@@ -1,18 +1,17 @@
 
 Overall:
   - mobile view and break points
-  - take out hard coded url in app
-  - Log off
   - Change terneary operators to (condition && jsx) format
   - TESTS
-  - take out hard coded url in app
-  - Log off
   - Change terneary operators to (condition && jsx) format
   - deal with errors from fetch requests
   - html for invalid username/password
   - add Bearer to JWT
   - Need catch for requests with invalid token
-  - make overall height larger website jumps less
+  - # make overall height larger website jumps less(this is done, but probably
+    can be done better)
+  # Log off
+  # take out hard coded url endpoints in app
 
 
 Search:
@@ -21,8 +20,8 @@ Search:
 Login:
   - refactor Login.js
     - can be split into smaller components
-    - need to take out hard coded urls (should use environ variables)
   - focus should go onto login name when first going onto page
+  # need to take out hard coded urls (should use environ variables)
 
 
 Recipe List:
