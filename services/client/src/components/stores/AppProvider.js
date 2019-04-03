@@ -23,7 +23,7 @@ export default function AppContextWrapper(props) {
   const [filters, setFilters] = useState([]);
   const [filterObj, setFilterObj] = useState(foodObj);
   const numRecipesToFetch = 5;
-  const recipeUrlPrefix = "http://localhost:5000/"
+  const recipeUrlPrefix = `${process.env.REACT_APP_RECIPES_SERVICE_URL}/`
 
   // checks if recipe list is running out and fetches more if they are
   useEffect(() => {

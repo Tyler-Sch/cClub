@@ -10,17 +10,13 @@ function Login(props) {
   const [inCreateNew, setCreateNew] = useState(false);
   const [redirect, setRedirect] = useState(false);
 
-  const { setLogin } = useContext(UserContext);
+  const { setLogin, userUrlPrefix } = useContext(UserContext);
 
   const sub = async (e) => {
     e.preventDefault();
     console.log('loggin in')
-    const url = (inCreateNew) ? 'http://localhost:5003/users/create-new' :
-    'http://localhost:5003/users/login';
-    // const url = (inCreateNew) ? process.env.REACT_APP_CREATE_NEW_USER :
-    // process.env.REACT_APP_LOGIN;
-    console.log(url);
-    console.log({username, password, email})
+    const url = (inCreateNew) ? `${userUrlPrefix}users/create-new` :
+    `${userUrlPrefix}users/login`;
 
     const response = await fetch(
       url,

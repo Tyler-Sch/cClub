@@ -10,7 +10,7 @@ export default function User(props) {
   const [savedRecipes, setSavedRecipes] = useState([]);
   const [targetList, setTargetList] = useState(null);
   const [loggedIn, setLogin] = useState(null);
-  const userUrlPrefix = "http://localhost:5003/";
+  const userUrlPrefix = `${process.env.REACT_APP_USERS_SERVICE_URL}/`;
 
   useEffect(() => {
     // check on loading
