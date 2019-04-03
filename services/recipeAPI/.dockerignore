@@ -1,0 +1,7 @@
+
+/food_data/*
+/server/tests/__pycache__/*
+/stockDB/dbDump/*
+/stockDB/recipes/*
+/cClub/*
+**/*.pyc

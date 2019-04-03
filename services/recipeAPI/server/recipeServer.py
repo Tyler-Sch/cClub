@@ -1,9 +1,7 @@
 from sanic import Sanic
-from sanic.response import json, html
+from sanic.response import json
 import os
-import asyncio
-import uvloop
-from asyncpg import connect, create_pool
+from asyncpg import create_pool
 from sanic_cors import CORS
 
 
@@ -42,6 +40,7 @@ async def getRecipe(request, id):
         """, id)
         results['steps'] = [i['step'] for i in steps]
     return json(results)
+
 
 @app.route('/recipes/random/<amount:int>')
 async def get_random_recipes(request, amount):
@@ -140,6 +139,30 @@ async def get_recipe_restricted(request):
     return json([dict(i) for i in results])
     # return json(include_set)
 
+
+@app.get('/recipes/ingredients')
+async def fetchRecipes(request):
+    data = request.args
+
+    query = """
+        SELECT r.id, r.name, i.original_text, il.ingredient, ii.fdgroup_name
+        FROM (((ingredients i INNER JOIN recipes r ON i.recipe = r.id )
+        INNER JOIN ingredient_list il ON i.ingredient = il.id)
+        INNER JOIN ingredient_information ii ON i.ingredient = ii.id)
+        WHERE r.id = ANY($1)
+    """
+
+    # return json({'data': data, 'recipe_ids': recipe_ids})
+    if data.get('recipes') is None or len(data.get('recipes')) == 0:
+        return json({
+            'status': 'error',
+            'message': 'no recipe ids'
+        })
+    recipe_ids = data['recipes']
+    async with app.pool.acquire() as connection:
+        results = await connection.fetch(query, [int(i) for i in recipe_ids])
+
+    return json([dict(i) for i in results])
 
 
 if __name__ == '__main__':

@@ -8,9 +8,11 @@ from user_server.api.logindecorator import login_required
 users_blueprint = Blueprint('users', __name__)
 CORS(users_blueprint)
 
+
 @users_blueprint.route('/')
 def index():
     return 'hello world'
+
 
 @users_blueprint.route('/users/check-login', methods=['GET'])
 @login_required
@@ -18,8 +20,9 @@ def check_logged_in():
     # if this function fires then it's past the login required decorator
     return jsonify({
         'loggedIn': True,
-        'token':g.user.generate_auth_token().decode('utf-8')
+        'token': g.user.generate_auth_token().decode('utf-8')
         })
+
 
 @users_blueprint.route('/users/create-new', methods=['POST'])
 def create_new_user():
@@ -90,6 +93,7 @@ def login():
     response['message'] = 'logged in success'
     return jsonify(response)
 
+
 @users_blueprint.route('/test/logindec', methods=['GET'])
 @login_required
 def loginreq():
@@ -112,7 +116,10 @@ def create_recipe_list():
     data = request.get_json()
     user = g.user
     recipe_list_name = data.get('recipeListName')
-    new_recipe_list = RecipeList(list_creator=user.id, list_name=recipe_list_name)
+    new_recipe_list = RecipeList(
+        list_creator=user.id,
+        list_name=recipe_list_name
+    )
     db.session.add(new_recipe_list)
     db.session.commit()
     for recipe in data.get('recipes'):
@@ -126,7 +133,8 @@ def create_recipe_list():
         )
         db.session.add(new_recipe)
 
-    if data.get('recipes'): db.session.commit()
+    if data.get('recipes'):
+        db.session.commit()
     user.recipe_lists.append(new_recipe_list)
     db.session.commit()
     return jsonify({
@@ -134,6 +142,7 @@ def create_recipe_list():
         'message': f'{user.username} added {recipe_list_name}',
         'recipeListId': new_recipe_list.id
     })
+
 
 @users_blueprint.route('/users/get-recipeLists', methods=['GET'])
 @login_required
@@ -144,22 +153,23 @@ def get_recipe_lists():
     current_recipe_lists = user.recipe_lists
     recipe_lists = []
     for list_ in current_recipe_lists:
-        l = {}
-        l['listName'] = list_.list_name
-        l['creator'] = list_.list_creator
-        l['createdDate'] = list_.created_date
-        l['recipes'] = [{
+        list_dict = {}
+        list_dict['listName'] = list_.list_name
+        list_dict['creator'] = list_.list_creator
+        list_dict['createdDate'] = list_.created_date
+        list_dict['recipes'] = [{
                             'id': r.recipe_id,
                             'name': r.recipe_name,
                             'url': r.recipe_url,
                             'pic_url': r.pic_url
                             } for r in list_.recipes]
-        l['users'] = [[u.id, u.username] for u in list_.users]
-        l['listId'] = [list_.id]
-        recipe_lists.append(l)
+        list_dict['users'] = [[u.id, u.username] for u in list_.users]
+        list_dict['listId'] = [list_.id]
+        recipe_lists.append(list_dict)
     return jsonify({
         'recipeList': recipe_lists
     })
+
 
 @users_blueprint.route('/users/add-recipes-to-list', methods=['POST'])
 @login_required
@@ -177,7 +187,6 @@ def add_recipes_to_list():
     """
     data = request.get_json()
     user = g.user
-    new_recipes = data.get('recipes')
     target_list_id = data.get('targetListId')
     current_recipe_list = RecipeList.query.filter_by(id=target_list_id).first()
     previous_recipes = [r.recipe_id for r in current_recipe_list.recipes]
@@ -203,15 +212,9 @@ def add_recipes_to_list():
     })
 
 
-
-
 @users_blueprint.route('/users/remove-recipe', methods=['POST'])
 @login_required
 def remove_recipe_from_list():
-    # maybe this should be wrapped in try/except block to catch errors
-    # that I am too inexperienced to comprehend. Maybe all of my code should
-    # do that????
-
     # what happens when target is not found???
     """
         Input:
@@ -228,7 +231,7 @@ def remove_recipe_from_list():
                     updatedRecipes: [list of all recipes in target list]
                 }
     """
-    user = g.user
+
     data = request.get_json()
     target = (data['targetList'], data['targetRecipe'])
     recipe = Recipes.query.get(target)

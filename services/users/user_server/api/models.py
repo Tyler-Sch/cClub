@@ -2,9 +2,8 @@ from sqlalchemy.sql import func
 
 from user_server.userServer import db
 from itsdangerous import (TimedJSONWebSignatureSerializer
-                            as Serializer, BadSignature, SignatureExpired)
+    as Serializer, BadSignature, SignatureExpired)
 from werkzeug.security import generate_password_hash, check_password_hash
-
 
 
 # need to set SECRET_KEY
@@ -74,18 +73,10 @@ class RecipeList(db.Model):
     created_date = db.Column(db.DateTime, default=func.now(), nullable=False)
     recipes = db.relationship("Recipes", backref=db.backref("recipelist"))
 
-
-    ## this box seems not needed
-    #############################################
-    # users = db.relationship(                  #
-    #     "users",                              #
-    #     secondary=recipe_list_user_list,      #
-    #     backref=db.backref('recipelist')      #
-    # )
-    #############################################
     def __init__(self, list_creator, list_name):
         self.list_creator = list_creator
         self.list_name = list_name
+
 
 class Recipes(db.Model):
     # need to restrict recipes so you can't add same recipe twice
@@ -105,7 +96,6 @@ class Recipes(db.Model):
     added_by = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     has_cooked = db.Column(db.Boolean, default=False, nullable=False)
     date_first_cooked = db.Column(db.DateTime, nullable=True)
-
 
     def __init__(
                 self, recipe_name, recipe_url, pic_url,

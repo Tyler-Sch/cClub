@@ -1,0 +1,78 @@
+version: '3.7'
+
+services:
+
+  recipes:
+    build:
+      context: ./services/recipeAPI
+      dockerfile: Dockerfile-dev
+    expose:
+        - '8000'
+    environment:
+      - APP_SETTINGS=Production
+      - DATABASE_URI=postgres://postgres:postgres@recipes-db:5432/recipes_test
+      - DATABASE_TEST_URL=postgres://postgres@recipes-db:5432/recipes_test
+    depends_on:
+      - recipes-db
+
+  recipes-db:
+    build:
+      context: ./services/recipeAPI/server/db
+      dockerfile: Dockerfile
+    expose:
+        - '5432'
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+
+  users:
+    build:
+      context: ./services/users
+      dockerfile: Dockerfile-prod
+    ports:
+      - 5003:5002
+    environment:
+      - FLASK_APP=user_server/userServer.py
+      - FLASK_ENV=production
+      - APP_SETTINGS=user_server.config.ProductionConfig
+      - DATABASE_URL=postgres://postgres:postgres@users-db:5432/users_prod
+      - DATABASE_TEST_URL=postgres://postgres:postgres@users-db:5432/users_test
+    depends_on:
+      - users-db
+
+  users-db:
+    build:
+      context: ./services/users/user_server/db
+      dockerfile: Dockerfile
+    ports:
+      - "5436:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+
+  nginx:
+    build:
+      context: ./services/nginx
+      dockerfile: Dockerfile-prod
+    restart: unless-stopped
+    ports:
+      - 80:80
+    depends_on:
+      - recipes
+      - users
+      - client
+
+  client:
+    container_name: client
+    build:
+      context: ./services/client
+      dockerfile: Dockerfile-prod
+      args:
+        - NODE_ENV=production
+        - REACT_APP_USERS_SERVICE_URL=${REACT_APP_USERS_SERVICE_URL}
+        - REACT_APP_RECIPES_SERVICE_URL=${REACT_APP_RECIPES_SERVICE_URL}
+    ports:
+      - '3007:80'
+    depends_on:
+      - users
+      - recipes

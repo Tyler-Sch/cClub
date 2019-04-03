@@ -2,7 +2,9 @@ env
 .dockerignore
 Dockerfile-dev
 Dockerfile-prod
+**/*.pyc
 __pycache__
 recipeServer
 cClub
 images
+/.pytest_cache/*

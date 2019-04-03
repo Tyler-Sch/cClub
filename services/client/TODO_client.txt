@@ -1,0 +1,59 @@
+
+Overall:
+  - mobile view and break points
+  - Change terneary operators to (condition && jsx) format
+  - TESTS
+  - Change terneary operators to (condition && jsx) format
+  - deal with errors from fetch requests
+  - html for invalid username/password
+  - add Bearer to JWT
+  - Need catch for requests with invalid token
+  - # make overall height larger website jumps less(this is done, but probably
+    can be done better)
+  # Log off
+  # take out hard coded url endpoints in app
+
+
+Search:
+  - add search back in
+
+Login:
+  - refactor Login.js
+    - can be split into smaller components
+  - focus should go onto login name when first going onto page
+  # need to take out hard coded urls (should use environ variables)
+
+
+Recipe List:
+  - delete visible on hover ONLY in non-mobile
+  - need save recipe button to work when attempting to save list that
+    hasn't been created
+    server side)
+  - should sort recipe Lists in last modified
+  - would be nice if recipe lists would change order if they had been worked
+    on more recently. (might take care of itself if we store when last modded
+    and sort by that date on the backend)
+  - need to be able to delete recipeLists
+  - BUG: front end crashes when you try to save a recipe list on a list that
+         hasn't been created
+  - BUG: when going back to recipe list from any other pages,
+    the recipe list that was in scope changes back to the null ("Recipes") value
+    but the previous saved recipes remains, this also prevents delete operations
+    on that list
+      - could move targetRecipe varaible up to users so it is persistent
+      - could take care of it within RecipeList, but maybe complicated
+  # load recipes from saved id list
+  # duplicate recipes can be added by switching to other recipe lists (solved
+  # delete unsaved recipes
+  # delete saved recipes
+  # after creating new list, the focus target list should move to new empty list
+  # hover on recipe list menu
+
+
+
+Filter:
+  - make it look nicer
+  - add filter by sources
+
+AppProvider:
+  - make fetch recipes and filtered fetch recipes into one function

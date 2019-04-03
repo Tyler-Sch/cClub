@@ -1,0 +1,27 @@
+######################
+#  STEPS TO DEPLOY   #
+#  USING AWS AND     #
+#  DOCKER-COMPOSE    #
+######################
+
+ docker-machine create --driver amazonec2 #nameofapp#
+
+ docker-machine env #nameofapp#
+
+ eval $(docker-machine env #nameofapp#)
+
+ docker-compose -f docker-compose-prod.yml up -d --build
+
+ #### create databases ######
+
+# connect to database
+docker-compose -f docker-compose-prod.yml exec #nameofdatabaseinstance# sh
+
+# load datafile (after file had a been moved to directory)
+#  (run when in the database)
+psql -U postgres recipes_test < currentDBdump
+
+
+#### users databases ######
+docker-compose -f docker-compose-prod.yml exec users sh
+python manage.py recreate_db

@@ -2,6 +2,7 @@ from functools import wraps
 from user_server.api.models import User
 from flask import g, jsonify, request
 
+
 def login_required(fn):
     @wraps(fn)
     def wrap(*args, **kwargs):
