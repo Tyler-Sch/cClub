@@ -14,14 +14,14 @@
 
  #### create databases ######
 
- connect to database
- docker-compose -f docker-compose-prod.yml exec #nameofdatabaseinstance# sh
+# connect to database
+docker-compose -f docker-compose-prod.yml exec #nameofdatabaseinstance# sh
 
- load datafile (after file had a been moved to directory)
-(run when in the database)
+# load datafile (after file had a been moved to directory)
+#  (run when in the database)
 psql -U postgres recipes_test < currentDBdump
 
 
-#### users databases
+#### users databases ######
 docker-compose -f docker-compose-prod.yml exec users sh
 python manage.py recreate_db
