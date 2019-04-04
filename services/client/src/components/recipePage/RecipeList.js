@@ -2,12 +2,13 @@ import React, { useContext, useState, useEffect } from 'react';
 import protectedFetch from '../helpers';
 import Dropdown from '../standardComps/Dropdown';
 import { UserContext } from '../stores/UserStore';
+import MenuList from './menuList';
+import Recipes from './Recipes';
 
 
 export default function RecipeList(props) {
 
   const [newListName, setNewListName] = useState('');
-  // const [targetList, setTargetList] = useState(null);
   const [lenRecipeList, setLenRecipeList] = useState(null);
 
   const {
@@ -30,7 +31,6 @@ export default function RecipeList(props) {
   }, [targetList])
 
   useEffect(() => {
-    console.log('useEffect in recipeLIst fired');
     document.querySelector("#main").style.minHeight = '4000px';
   })
 
@@ -104,65 +104,16 @@ export default function RecipeList(props) {
     setUserRecipes(userRecipes.filter((i) => i.id !== id));
   }
 
-
-
-  const currentRecipeList = userRecipes.map((i) => (
-    <li className="" key={i.id}>
-      <div className="">
-        <a className="has-text-grey" href={i.url} target="_blank">{i.name}</a>
-        <button onClick={() => removeElement(i.id)}className="delete is-pulled-right"></button>
-      </div>
-    </li>
-    )
-  );
-
-  const savedRecipeList = savedRecipes.map((i) => (
-    <li key={i.id}>
-      <div>
-        <a className="has-text-dark" href={i.url} target="_blank">{i.name}</a>
-        <button onClick={() => removeSavedRecipe(i.id)}
-          className="delete is-pulled-right"></button>
-      </div>
-    </li>
-    )
-  );
-
   // should come up with a better way of centering info.
   // currently it's in an h1 tag which feel oh so wrong
   return (
     <div className="section">
-      <Dropdown text='Lists'>
-        <div className="dropdown-item">
-          <div className="menu">
-            <p className="menu-label">Create new list</p>
-            <ul className="menu-list">
-              <li>
-                <form className="field" onSubmit={createRecipeList}>
-                  <div className="control">
-                    <input
-                      size="7"
-                      type="text"
-                      placeholder="new list name"
-                      onChange={(e) => setNewListName(e.target.value)}
-                      value={newListName}
-                    />
-                  </div>
-                </form>
-              </li>
-            </ul>
-            <p className="menu-label">ListName</p>
-            <ul className="menu-list">
-              {
-                (userRecipeList.length > 0) && userRecipeList.map((i, idx) => (
-                  <li key={idx} onClick={() => setTargetList(idx)}><a>
-                  {i.listName}</a></li>
-                ))
-              }
-
-            </ul>
-          </div>
-        </div>
-      </Dropdown>
+      <MenuList submit={createRecipeList}
+                change={(e) => setNewListName(e.target.value)}
+                val={newListName}
+                userRecipeL={userRecipeList}
+                setTargetList={setTargetList}
+      />
       <h1 className="has-text-centered">
         {!loggedIn &&
         <span className="tag is-warning ">please log in to save recipes</span>
@@ -174,8 +125,16 @@ export default function RecipeList(props) {
         </h1>
 
       <ul>
-        {currentRecipeList}
-        {savedRecipeList}
+        <Recipes
+          listItems={userRecipes}
+          classColor={'has-text-grey'}
+          onClickFunction={removeElement}
+        />
+        <Recipes
+          listItems={savedRecipes}
+          classColor={'has-text-dark'}
+          onClickFunction={removeSavedRecipe}
+        />
       </ul>
 
       {
