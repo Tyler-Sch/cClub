@@ -9,9 +9,9 @@ users_blueprint = Blueprint('users', __name__)
 CORS(users_blueprint)
 
 
-#@users_blueprint.route('/')
-#def index():
-#    return 'hello world'
+@users_blueprint.route('/')
+def index():
+    return 'hello world'
 
 
 @users_blueprint.route('/users/check-login', methods=['GET'])
