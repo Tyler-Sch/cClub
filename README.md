@@ -1,9 +1,13 @@
 # Cooking Club
 
 Inspired by Tinder, I created a website for finding recipes in a visual and fun way.
-Add the ones you want to a recipe list, automatically generate a grocery list,
-and get cooking. Many technologies have been used to create the base version
-of this web page and I'm excited to add more features. Main components include react client for the front end, a recipe database and api, a user database and api, a recurrent neural network for part of speech tagging of ingredients, webscrapers, up to 1 million recipes, and nginx set up as a reverse proxy.
+Find and add the recipes to a list, automatically generate a grocery list,
+and get cooking.
+
+Many technologies have been used to create the base version
+of this web page and I'm excited to add more features.
+
+Main components include react client for the front end, a recipe database and api, a user database and api, a recurrent neural network for part of speech tagging of ingredients, webscrapers, up to 1 million recipes, and nginx set up as a reverse proxy.
 
 ### Prerequisites:
 
@@ -20,7 +24,7 @@ Set up system:
   git clone https://github.com/wintermutestoothache/cClub.git
   cd cClub
 ```
-for prod version:
+for a local production version:
 ```
   export REACT_APP_USERS_SERVICE_URL=http://localhost
   export REACT_APP_RECIPES_SERVICE_URL=http://localhost
@@ -49,13 +53,13 @@ for prod version:
 * [Flask](http://flask.pocoo.org/) - basic web microframework
 * [SQLAlchemy](https://www.sqlalchemy.org/) - python based ORM
 
-* [Nginx](https://www.nginx.com/resources/wiki/) - open-source http server and reverse proxy
-
-* [React](https://reactjs.org/)
+* [React](https://reactjs.org/) - and react hooks
+* [Bulma](https://bulma.io/) - css framework
 
 ## Deployed with:
 
 * [Docker](https://www.docker.com/)
 * [AWS](https://aws.amazon.com/)
+* [Nginx](https://www.nginx.com/resources/wiki/) - open-source http server and reverse proxy
 
 And many others.
