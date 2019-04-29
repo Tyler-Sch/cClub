@@ -6,7 +6,6 @@ from itsdangerous import (TimedJSONWebSignatureSerializer
 from werkzeug.security import generate_password_hash, check_password_hash
 
 
-# need to set SECRET_KEY
 recipe_list_user_list = db.Table(
     'recipe_list_user_list',
     db.Column(

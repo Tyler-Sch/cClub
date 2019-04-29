@@ -38,7 +38,7 @@ async def main(recipe_file, workers, source):
     picture_dict = await load_file('recipes/layer2.json')
     pic_dic = {i['id']:i['images'][0] for i in picture_dict}
 
-    database_address_string = ('postgres://localhost:5435/recipes_test'
+    database_address_string = ('postgres://localhost:5435/recipes_dev'
                                     '?user=postgres&password=postgres'
                                 )
     async with asyncpg.create_pool(database_address_string) as pool:
