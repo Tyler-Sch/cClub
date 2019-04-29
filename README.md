@@ -46,6 +46,7 @@ for a local production version:
 * [Sanic](https://github.com/huge-success/sanic) - python3.6 based async web server
 * [AsyncPG](https://magicstack.github.io/asyncpg/current/) - python async database interface library
 * [Postgres](https://www.postgresql.org/)
+* [pytest](https://docs.pytest.org/en/latest/) - test writing library
 
 * [Kera](https://keras.io/) - a framework for developing neural networks
 * [Pandas](https://pandas.pydata.org/) - data analysis framework
@@ -56,10 +57,10 @@ for a local production version:
 * [React](https://reactjs.org/) - and react hooks
 * [Bulma](https://bulma.io/) - css framework
 
+And many others.
+
 ## Deployed with:
 
 * [Docker](https://www.docker.com/)
 * [AWS](https://aws.amazon.com/)
 * [Nginx](https://www.nginx.com/resources/wiki/) - open-source http server and reverse proxy
-
-And many others.
