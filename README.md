@@ -9,7 +9,7 @@ of this web page and I'm excited to add more features.
 
 Main components include react client for the front end, a recipe database and api, a user database and api, a recurrent neural network for part of speech tagging of ingredients, webscrapers, up to 1 million recipes, and nginx set up as a reverse proxy.
 
-### Prerequisites:
+## Prerequisites:
 
 For simple build:
 ```
@@ -17,7 +17,7 @@ For simple build:
   docker-compose
 ```
 
-### Installation:
+## Installation:
 Set up system:
   create a directory and clone repository
 ```
@@ -47,6 +47,7 @@ for a local production version:
 * [AsyncPG](https://magicstack.github.io/asyncpg/current/) - python async database interface library
 * [Postgres](https://www.postgresql.org/)
 * [pytest](https://docs.pytest.org/en/latest/) - test writing library
+* [fastText](https://fasttext.cc/) - pretrained word vectors
 
 * [Kera](https://keras.io/) - a framework for developing neural networks
 * [Pandas](https://pandas.pydata.org/) - data analysis framework
