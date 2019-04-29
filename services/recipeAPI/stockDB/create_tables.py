@@ -2,7 +2,7 @@ import asyncio
 import asyncpg
 
 async def main():
-    conn = await asyncpg.connect('postgres://localhost:5435/recipes_test'
+    conn = await asyncpg.connect('postgres://localhost:5435/recipes_dev'
         '?user=postgres&password=postgres')
 
     await conn.execute("""
