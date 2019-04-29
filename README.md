@@ -53,4 +53,9 @@ for prod version:
 
 * [React](https://reactjs.org/)
 
+## Deployed with:
+
+* [Docker](https://www.docker.com/)
+* [AWS](https://aws.amazon.com/)
+
 And many others.
