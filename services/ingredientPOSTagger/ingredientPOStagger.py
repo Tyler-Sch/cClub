@@ -16,11 +16,15 @@ import uvloop
 
 
 app = Sanic()
+
+# load RNN model
 model_main = load_model(
     'winningModelSoFar/doubleLayerGRUMoreData/'
     'doubleLayerGRUTrainable2McommonMostData.hdf5'
 )
 model_main._make_predict_function()
+
+#load vocabulary mappings
 with open('winningModelSoFar/doubleLayerGRUMoreData/word2index.json', 'r') as f:
     word2index = json.loads(f.read())
 with open('winningModelSoFar/doubleLayerGRUMoreData/tag2index.json', 'r') as f:
