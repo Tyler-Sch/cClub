@@ -19,7 +19,7 @@ python-dateutil==2.7.5
 pytz==2018.9
 PyYAML==3.13
 requests==2.21.0
-sanic==18.12.0
+sanic==20.12.6
 scipy==1.2.0
 six==1.12.0
 tensorflow
