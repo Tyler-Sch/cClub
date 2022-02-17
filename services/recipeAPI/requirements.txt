@@ -16,7 +16,7 @@ pluggy==0.8.1
 py==1.7.0
 pytest==4.2.0
 pytest-sanic==0.1.15
-sanic==18.12.0
+sanic==20.12.6
 Sanic-Cors==0.9.7
 Sanic-Plugins-Framework==0.6.5
 six==1.12.0
