@@ -14,7 +14,7 @@ Keras-Preprocessing==1.0.8
 Markdown==3.0.1
 multidict==4.5.2
 numpy==1.16.1
-protobuf==3.6.1
+protobuf==3.18.3
 python-dateutil==2.7.5
 pytz==2018.9
 PyYAML==3.13
